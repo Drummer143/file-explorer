@@ -12,7 +12,7 @@ if (require('electron-squirrel-startup')) {
     app.quit();
 }
 
-const PATH_TO_WINDOW_LOGS = 'C:\\Users\\berge\\source\\repos\\file-explorer\\windowConfig.json';
+const PATH_TO_WINDOW_LOGS = isDev ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json' : __dirname + 'windowConfig.json';
 
 const createWindow = (): void => {
     let windowConfig: Electron.BrowserWindowConstructorOptions;
