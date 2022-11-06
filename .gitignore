@@ -90,3 +90,4 @@ out/
 
 # Prettier
 .prettierignore
+windowConfig.json
