@@ -13,6 +13,9 @@
     "prettier": "prettier --write src"
   },
   "keywords": [],
+  "browser": {
+    "child_process": false
+  },
   "author": {
     "name": "Drummer143",
     "email": "berg.evg.1@gmail.com"
@@ -45,6 +48,7 @@
     "webpack": "^5.74.0"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.8",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "electron-squirrel-startup": "^1.0.0",
