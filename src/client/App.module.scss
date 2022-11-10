@@ -1,0 +1,50 @@
+.files {
+    width: 70%;
+
+    margin: 10px auto 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 5%;
+}
+
+%button {
+    width: 30%;
+    height: 50px;
+
+    cursor: pointer;
+    border-radius: 15px;
+    border: 1px solid transparent;
+    transition: border-color .1s;
+}
+
+.directoryButton {
+    @extend %button;
+
+    background-color: #f2f2f2;
+    color: #000;
+}
+
+.directoryButton:hover {
+    border-color: #0008;
+}
+
+.fileButton {
+    @extend %button;
+
+    background-color: #333;
+    color: #eee;
+}
+
+.fileButton:hover {
+    border-color: red;
+}
+
+.path {
+    margin: 10px auto 25px;
+
+    text-align: center;
+}

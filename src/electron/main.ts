@@ -94,7 +94,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-ipcMain.once('get-drives', (event) => {
+ipcMain.on('get-drives', (event) => {
     exec('wmic logicaldisk get name', (error, stdout) => {
         if (error) {
             console.log(error);
@@ -103,9 +103,37 @@ ipcMain.once('get-drives', (event) => {
                 .filter((value: string) => /[A-Za-z]:/.test(value))
                 .map((value: string) => value.trim());
 
-            console.log(info);
-
             event.sender.send('drives-loaded', info);
         }
     });
+})
+
+ipcMain.on('read-directory', (event, path: string) => {
+    console.log('read-directory', path);
+
+    if (path) {
+        const files = fs.readdirSync(`${path}\\`, { encoding: 'utf-8', withFileTypes: true })
+        .map(file => {
+            file.isBlockDevice();
+            return {
+                fileName: file.name,
+                isFile: file.isFile(),
+                isDirectory: file.isDirectory()
+            }
+        })
+
+        event.sender.send('directory', files);
+    }
+})
+
+ipcMain.on('open-file', (event, path: string) => {
+    console.log('open-file', path);
+
+    exec(path, (error, stdout) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(stdout);
+        }
+    })
 })

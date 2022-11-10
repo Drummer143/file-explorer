@@ -1,7 +1,11 @@
 export interface IElectronAPI {
     getDrives: () => void,
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    onDrivesLoaded: (callback: (event: Electron.IpcRendererEvent, drives: string[]) => void) => void
+    onDrivesLoaded: (callback: (event: Electron.IpcRendererEvent, drives: string[]) => void) => void,
+
+    readDirectory: (path: string) => void,
+    onReadDirectory: (callback: (event: Electron.IpcRendererEvent, files: any) => void) => void,
+
+    openFile: (path: string) => void
 }
 
 declare global {
