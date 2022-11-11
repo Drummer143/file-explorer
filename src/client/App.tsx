@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import styles from './App.module.scss';
 
@@ -11,6 +11,8 @@ type File = {
 function App() {
     const [data, setData] = useState<File[]>();
     const [currentPath, setCurrentPath] = useState<string>('');
+    const filesContainerRef = useRef<HTMLDivElement>(null);
+    const [status, setStatus] = useState<'normal' | 'hiding' | 'appearing'>('normal');
 
     const updatePath = (newFolder: File) => {
         if (newFolder.isDirectory) {
@@ -63,12 +65,16 @@ function App() {
         }
     }, [currentPath]);
 
+    const animation = () => {
+        filesContainerRef.current.className = styles.roll.concat(' ' + filesContainerRef.current.className);
+    }
+
     return (
         <>
-            {currentPath && <h1 className={styles.path}>{currentPath}</h1>}
+            {<h1 className={styles.path}>{currentPath || 'empty'}</h1>}
 
-            <div className={styles.files}>
-                {data && data.map((file, i) => <button key={i + file.fileName[0]} className={file.isDirectory ? styles.directoryButton : styles.fileButton} onClick={() => handleOpenFile(file)}>{file.fileName}</button>)}
+            <div ref={filesContainerRef} className={styles.filesContainer}>
+                {data && data.map((file, i) => <button key={i + file.fileName[0]} className={styles.file}>{file.fileName}</button>)}
             </div>
         </>
     )

@@ -36,7 +36,8 @@ export const rules: Required<ModuleOptions>['rules'] = [
             // Translates CSS into CommonJS
             'css-loader',
             // Compiles Sass to CSS
-            'sass-loader'
+            'sass-loader',
+            'postcss-loader'
         ]
     }
 ];
