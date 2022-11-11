@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --bg-dark: #121212;
+    --menu-dark: #181818;
+    --top-grey-dark: #404040;
+    --bottom-grey-dark: #282828;
+    --primary-text-dark: #fff;
+    --secondary-text-dark: #b3b3b3;
+    --path-input-gradient-dark: repeating-linear-gradient(180deg, #121212 0%, #404040 25%, #404040 75%, #121212 100%);
+}
+
 * {
     box-sizing: border-box;
 
@@ -10,4 +20,14 @@
 
     outline: none;
     border: none;
+    background-color: transparent;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+
+    overflow: hidden;
+    background-color: var(--bg-dark);
+    color: var(--primary-text-dark);
 }

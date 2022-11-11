@@ -110,26 +110,28 @@ ipcMain.on('get-drives', (event) => {
 })
 
 ipcMain.on('read-directory', (event, path: string) => {
-    console.log('read-directory', path);
-
     if (path) {
-        const files = fs.readdirSync(`${path}\\`, { encoding: 'utf-8', withFileTypes: true })
-        .map(file => {
-            file.isBlockDevice();
-            return {
-                fileName: file.name,
-                isFile: file.isFile(),
-                isDirectory: file.isDirectory()
-            }
+        const files = fs.readdirSync(`${path}\\`, { encoding: 'utf-8' })
+            .map(file => {
+                try {
+                    const stats = fs.statSync(`${path}\\${file}`);
+                    // console.log(file, JSON.stringify(stats, null, '\t'));
+                    return {
+                        fileName: file,
+                        isFile: stats.isFile(),
+                        isDirectory: stats.isDirectory(),
+                        size: stats.size
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
         })
 
-        event.sender.send('directory', files);
+        event.sender.send('directory', files.filter(file => file));
     }
 })
 
 ipcMain.on('open-file', (event, path: string) => {
-    console.log('open-file', path);
-
     exec(path, (error, stdout) => {
         if (error) {
             console.log(error);
