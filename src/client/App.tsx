@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import styles from './App.module.scss';
 import FileButton from './components/FileButton/FileButton';
+import GoogleIcon from './components/GoogleIcon/GoogleIcon';
 
 function App() {
     const [data, setData] = useState<CustomFile[]>();

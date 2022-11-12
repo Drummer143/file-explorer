@@ -90,3 +90,7 @@ out/
 
 # Prettier
 .prettierignore
+.vscode
+
+.prettierrc.json
+.eslintrc.json

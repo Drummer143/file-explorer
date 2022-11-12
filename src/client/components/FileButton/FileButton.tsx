@@ -15,4 +15,4 @@ function FileButton({ file, onClick }: Props) {
     );
 }
 
-export default FileButton
+export default FileButton;
