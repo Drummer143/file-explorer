@@ -30,6 +30,7 @@ body {
     overflow: hidden;
     background-color: var(--bg-dark);
     color: var(--primary-text-dark);
+    user-select: none;
 }
 
 .material-symbols-outlined {
