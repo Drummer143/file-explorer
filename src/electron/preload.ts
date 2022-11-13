@@ -11,5 +11,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     readDirectory: (path: string) => ipcRenderer.send('read-directory', path),
     onReadDirectory: (callback: Function) => ipcRenderer.on('directory', (event: Electron.IpcRendererEvent, files: any) => callback(event, files)),
 
-    openFile: (path: string) => ipcRenderer.send('open-file', path)
+    openFile: (path: string) => ipcRenderer.send('open-file', path),
+
+
+    minimize: () => ipcRenderer.send('minimize'),
+    restoreToWindow: () => ipcRenderer.send('restore-to-window'),
+    maximize: () => ipcRenderer.send('maximize'),
+    close: () => ipcRenderer.send('close'),
+
+    getIsFullscreen: () => ipcRenderer.send('get-is-fullscreen'),
+    isFullscreen: (callback: Function) => ipcRenderer.once('is-fullscreen', (event: Electron.IpcRendererEvent, isFullscreen: Boolean) => callback(event, isFullscreen)),
 })

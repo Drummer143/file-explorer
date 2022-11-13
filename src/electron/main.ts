@@ -19,26 +19,27 @@ if (require('electron-squirrel-startup')) {
 const PATH_TO_WINDOW_LOGS = isDev ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json' : __dirname + 'windowConfig.json';
 
 const createWindow = (): void => {
-    let windowConfig: Electron.BrowserWindowConstructorOptions;
+    // let windowConfig: Electron.BrowserWindowConstructorOptions;
 
-    try {
-        windowConfig = JSON.parse(fs.readFileSync(PATH_TO_WINDOW_LOGS, { encoding: 'utf-8' }))
-    } catch (err) {
-        console.error(err);
-    }
+    // try {
+    //     windowConfig = JSON.parse(fs.readFileSync(PATH_TO_WINDOW_LOGS, { encoding: 'utf-8' }))
+    // } catch (err) {
+    //     console.error(err);
+    // }
 
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         height: 600,
         width: 800,
         frame: false,
+        fullscreen: true,
         webPreferences: {
             devTools: isDev,
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
             // nodeIntegration: true,
             contextIsolation: true
         },
-        ...windowConfig
+        // ...windowConfig
     });
 
     // and load the index.html of the app.
@@ -65,9 +66,12 @@ const createWindow = (): void => {
         fs.writeFileSync(PATH_TO_WINDOW_LOGS, JSON.stringify(windowConfig, null, '\t'))
     });
 
-    // mainWindow.on('get-drives', () => {
+    ipcMain.on('get-is-fullscreen', (event) => event.sender.send('is-fullscreen', mainWindow.isFullScreen()));
 
-    // })
+    ipcMain.on('minimize', () => mainWindow.minimize());
+    ipcMain.on('restore-to-window', () => mainWindow.setFullScreen(false));
+    ipcMain.on('maximize', () => mainWindow.setFullScreen(true));
+    ipcMain.on('close', () => mainWindow.close());
 };
 
 // This method will be called when Electron has finished

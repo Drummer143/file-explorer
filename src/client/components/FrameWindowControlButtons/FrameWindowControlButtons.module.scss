@@ -1,0 +1,19 @@
+.wrapper::after {
+    position: absolute;
+
+    top: 100%;
+    right: 0;
+
+    z-index: -1;
+
+    width: 140%;
+    height: 140%;
+
+    content: '';
+    background-color: transparent;
+    transition: top 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wrapper:hover::after {
+    top: 0;
+}

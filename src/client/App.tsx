@@ -3,11 +3,15 @@
 
 import FileExplorer from './components/FileExplorer/FileExplorer';
 
-import styles from './App.module.scss';
+// import styles from './App.module.scss';
+import FrameWindowControlButtons from './components/FrameWindowControlButtons/FrameWindowControlButtons';
 
 function App() {
     return (
-        <FileExplorer />
+        <>
+            <FrameWindowControlButtons />
+            <FileExplorer />
+        </>
     )
 }
 
