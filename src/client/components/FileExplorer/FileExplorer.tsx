@@ -5,9 +5,9 @@ import FileButton from "../FileButton/FileButton";
 import styles from './FileExplorer.module.scss';
 
 function FileExplorer() {
-    const [data, setData] = useState<CustomFile[]>();
+    const [data, setData] = useState<CustomFile[]>([]);
     const [currentPath, setCurrentPath] = useState<string>('');
-    const [isWaitingFiles, setIsWaitingFiles] = useState(false);
+    const [isWaitingFiles, setIsWaitingFiles] = useState(true);
     const [input, setInput] = useState(currentPath);
 
     const spanRef = useRef<HTMLSpanElement>(null);
@@ -57,6 +57,8 @@ function FileExplorer() {
                     size: 0
                 }
             }));
+
+            setIsWaitingFiles(false);
         })
 
         window.electronAPI.onReadDirectory((event, files) => {
@@ -87,9 +89,10 @@ function FileExplorer() {
 
                 <div
                     ref={fileContainerRef}
-                    className={`${currentPath ? 'top-40' : 'top-1/2 -translate-y-1/2'} ${isWaitingFiles && 'opacity-0'} max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer}`}
+                    className={`${currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'} ${isWaitingFiles && 'opacity-0'} ${data.length === 0 && 'min-h-[100px]'} max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer}`}
                 >
-                    {data && data.map(file => <FileButton key={file.fileName} file={file} onClick={() => handleOpenFile(file)} />)}
+                    {data.length ? data.map(file => <FileButton key={file.fileName} file={file} onClick={() => handleOpenFile(file)} />) :
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">Folder is empty</div>}
                 </div>
             </div>
         </>
