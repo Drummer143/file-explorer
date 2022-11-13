@@ -33,6 +33,7 @@ const createWindow = (): void => {
         width: 800,
         frame: false,
         fullscreen: true,
+        title: 'File Explorer',
         webPreferences: {
             devTools: isDev,
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,

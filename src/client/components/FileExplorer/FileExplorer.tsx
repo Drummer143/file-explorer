@@ -82,12 +82,12 @@ function FileExplorer() {
                     value={input}
                     onChange={handlePathInputChange}
                     onKeyDown={handlePathInputEnterPress}
-                    className={`absolute min-w-[400px] max-w-[80%] text-[var(--secondary-text-dark)] px-2 py-1 border-solid border border-transparent text-center rounded-2xl transition delay-50 duration-300 top-4 left-1/2 -translate-x-1/2 text-4xl leading-[3rem] hover:border-[var(--top-grey-dark)] focus:text-[var(--primary-text-dark)] ${styles.path}`}
+                    className={`absolute min-w-[400px] max-w-[80%] text-[var(--secondary-text-dark)] px-2 py-1 border-solid border border-transparent text-center rounded-2xl transition delay-50 duration-300 top-16 left-1/2 -translate-x-1/2 text-4xl leading-[3rem] hover:border-[var(--top-grey-dark)] focus:text-[var(--primary-text-dark)] ${styles.path}`}
                 />
 
                 <div
                     ref={fileContainerRef}
-                    className={`${currentPath ? 'top-24' : 'top-1/2 -translate-y-1/2'} ${isWaitingFiles && 'opacity-0'} max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_150px)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer}`}
+                    className={`${currentPath ? 'top-40' : 'top-1/2 -translate-y-1/2'} ${isWaitingFiles && 'opacity-0'} max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer}`}
                 >
                     {data && data.map(file => <FileButton key={file.fileName} file={file} onClick={() => handleOpenFile(file)} />)}
                 </div>
