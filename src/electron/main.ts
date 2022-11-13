@@ -16,7 +16,9 @@ if (require('electron-squirrel-startup')) {
     app.quit();
 }
 
-const PATH_TO_WINDOW_LOGS = isDev ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json' : __dirname + 'windowConfig.json';
+const PATH_TO_WINDOW_LOGS = isDev
+    ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json'
+    : __dirname + 'windowConfig.json';
 
 const createWindow = (): void => {
     // let windowConfig: Electron.BrowserWindowConstructorOptions;
@@ -39,16 +41,16 @@ const createWindow = (): void => {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
             // nodeIntegration: true,
             contextIsolation: true
-        },
+        }
         // ...windowConfig
     });
 
     // and load the index.html of the app.
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-    mainWindow.webContents.send
+    mainWindow.webContents.send;
 
     // Open the DevTools.
-    if (isDev/*  && windowConfig.webPreferences.devTools */) {
+    if (isDev /*  && windowConfig.webPreferences.devTools */) {
         mainWindow.webContents.openDevTools();
     }
 
@@ -58,16 +60,18 @@ const createWindow = (): void => {
             height: mainWindow.getBounds().height,
             x: mainWindow.getBounds().x,
             y: mainWindow.getBounds().y,
-            fullscreen: mainWindow.isFullScreen(),
+            fullscreen: mainWindow.isFullScreen()
             // webPreferences: {
             //     devTools: mainWindow.webContents.isDevToolsOpened()
             // }
-        }
+        };
 
-        fs.writeFileSync(PATH_TO_WINDOW_LOGS, JSON.stringify(windowConfig, null, '\t'))
+        fs.writeFileSync(PATH_TO_WINDOW_LOGS, JSON.stringify(windowConfig, null, '\t'));
     });
 
-    ipcMain.on('get-is-fullscreen', (event) => event.sender.send('is-fullscreen', mainWindow.isFullScreen()));
+    ipcMain.on('get-is-fullscreen', event =>
+        event.sender.send('is-fullscreen', mainWindow.isFullScreen())
+    );
 
     ipcMain.on('minimize', () => mainWindow.minimize());
     ipcMain.on('restore-to-window', () => mainWindow.setFullScreen(false));
@@ -100,41 +104,44 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-ipcMain.on('get-drives', (event) => {
+ipcMain.on('get-drives', event => {
     exec('wmic logicaldisk get name', (error, stdout) => {
         if (error) {
             console.log(error);
         } else {
-            const info = stdout.split('\r\r\n')
+            const info = stdout
+                .split('\r\r\n')
                 .filter((value: string) => /[A-Za-z]:/.test(value))
                 .map((value: string) => value.trim());
 
             event.sender.send('drives-loaded', info);
         }
     });
-})
+});
 
 ipcMain.on('read-directory', (event, path: string) => {
     if (path) {
-        const files = fs.readdirSync(`${path}\\`, { encoding: 'utf-8' })
-            .map(file => {
-                try {
-                    const stats = fs.statSync(`${path}\\${file}`);
-                    // console.log(file, JSON.stringify(stats, null, '\t'));
-                    return {
-                        fileName: file,
-                        isFile: stats.isFile(),
-                        isDirectory: stats.isDirectory(),
-                        size: stats.size
-                    }
-                } catch (err) {
-                    console.log(err);
-                }
-        })
+        const files = fs.readdirSync(`${path}\\`, { encoding: 'utf-8' }).map(file => {
+            try {
+                const stats = fs.statSync(`${path}\\${file}`);
+                // console.log(file, JSON.stringify(stats, null, '\t'));
+                return {
+                    fileName: file,
+                    isFile: stats.isFile(),
+                    isDirectory: stats.isDirectory(),
+                    size: stats.size
+                };
+            } catch (err) {
+                console.log(err);
+            }
+        });
 
-        event.sender.send('directory', files.filter(file => file));
+        event.sender.send(
+            'directory',
+            files.filter(file => file)
+        );
     }
-})
+});
 
 ipcMain.on('open-file', (event, path: string) => {
     exec(path, (error, stdout) => {
@@ -143,5 +150,5 @@ ipcMain.on('open-file', (event, path: string) => {
         } else {
             console.log(stdout);
         }
-    })
-})
+    });
+});

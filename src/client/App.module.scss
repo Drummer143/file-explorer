@@ -1,9 +1,15 @@
 .path:focus {
-    background: repeating-linear-gradient(90deg, #121212 0%, #404040 25%, #404040 75%, #121212 100%);
+    background: repeating-linear-gradient(
+        90deg,
+        #121212 0%,
+        #404040 25%,
+        #404040 75%,
+        #121212 100%
+    );
 }
 
 .filesContainer {
-    transition: transform .5s, top .5s, left .5s, opacity .5s;
+    transition: transform 0.5s, top 0.5s, left 0.5s, opacity 0.5s;
 }
 
 .filesContainer::-webkit-scrollbar {

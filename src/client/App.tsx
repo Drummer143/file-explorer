@@ -14,10 +14,13 @@ function App() {
     return (
         <>
             <TittleFrame isFullScreen={isFullscreen} />
-            <FrameWindowControlButtons isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen} />
+            <FrameWindowControlButtons
+                isFullscreen={isFullscreen}
+                setIsFullscreen={setIsFullscreen}
+            />
             <FileExplorer />
         </>
-    )
+    );
 }
 
 export default App;

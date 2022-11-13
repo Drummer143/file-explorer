@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 
-import FileButton from "../FileButton/FileButton";
+import FileButton from '../FileButton/FileButton';
 
 import styles from './FileExplorer.module.scss';
 
@@ -32,11 +32,11 @@ function FileExplorer() {
             const pathToFile = `${currentPath}\\${file.fileName}`;
             window.electronAPI.openFile(pathToFile);
         }
-    }
+    };
 
     const handlePathInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
-    }
+    };
 
     const handlePathInputEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Enter' && currentPath !== input) {
@@ -45,21 +45,23 @@ function FileExplorer() {
             inputRef.current.blur();
             setCurrentPath(input);
         }
-    }
+    };
 
     useEffect(() => {
         window.electronAPI.onDrivesLoaded((event, drives) => {
-            setData(drives.map(drive => {
-                return {
-                    fileName: drive,
-                    isFile: false,
-                    isDirectory: true,
-                    size: 0
-                }
-            }));
+            setData(
+                drives.map(drive => {
+                    return {
+                        fileName: drive,
+                        isFile: false,
+                        isDirectory: true,
+                        size: 0
+                    };
+                })
+            );
 
             setIsWaitingFiles(false);
-        })
+        });
 
         window.electronAPI.onReadDirectory((event, files) => {
             setData(files);
@@ -67,17 +69,19 @@ function FileExplorer() {
         });
 
         window.electronAPI.getDrives();
-    }, [])
+    }, []);
 
     useEffect(() => setInput(currentPath), [currentPath]);
 
     useEffect(() => {
-        inputRef.current.style.width = `${spanRef.current.clientWidth + 20 + 80}px`
-    }, [input])
+        inputRef.current.style.width = `${spanRef.current.clientWidth + 20 + 80}px`;
+    }, [input]);
 
     return (
         <>
-            <span ref={spanRef} className={'absolute text-4xl px-0.5 top-[-1000px] left-[-1000px]'}>{input}</span>
+            <span ref={spanRef} className={'absolute text-4xl px-0.5 top-[-1000px] left-[-1000px]'}>
+                {input}
+            </span>
             <div>
                 <input
                     ref={inputRef}
@@ -89,14 +93,31 @@ function FileExplorer() {
 
                 <div
                     ref={fileContainerRef}
-                    className={`${currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'} ${isWaitingFiles && 'opacity-0'} ${data.length === 0 && 'min-h-[100px]'} max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer}`}
+                    className={`${
+                        currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'
+                    } ${isWaitingFiles && 'opacity-0'} ${
+                        data.length === 0 && 'min-h-[100px]'
+                    } max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${
+                        styles.filesContainer
+                    }`}
                 >
-                    {data.length ? data.map(file => <FileButton key={file.fileName} file={file} onClick={() => handleOpenFile(file)} />) :
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">Folder is empty</div>}
+                    {data.length ? (
+                        data.map(file => (
+                            <FileButton
+                                key={file.fileName}
+                                file={file}
+                                onClick={() => handleOpenFile(file)}
+                            />
+                        ))
+                    ) : (
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                            Folder is empty
+                        </div>
+                    )}
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default FileExplorer;
