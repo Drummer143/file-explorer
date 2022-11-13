@@ -1,7 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../types.d.ts" />
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import TittleFrame from './components/TittleFrame/TittleFrame';
 import FileExplorer from './components/FileExplorer/FileExplorer';
@@ -11,6 +8,15 @@ import FrameWindowControlButtons from './components/FrameWindowControlButtons/Fr
 
 function App() {
     const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+        window.electronAPI.isFullscreen((event, isFullscreen) => {
+            setIsFullscreen(isFullscreen);
+        });
+
+        window.electronAPI.getIsFullscreen();
+    }, []);
+
     return (
         <>
             <TittleFrame isFullScreen={isFullscreen} />

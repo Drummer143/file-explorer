@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-
 import GoogleIcon from '../GoogleIcon/GoogleIcon';
 
 import styles from './FrameWindowControlButtons.module.scss';
@@ -20,14 +18,6 @@ function FrameWindowControlButtons({ isFullscreen, setIsFullscreen }: Props) {
         setIsFullscreen(prev => !prev);
     };
     const handleClose = () => window.electronAPI.close();
-
-    useEffect(() => {
-        window.electronAPI.isFullscreen((event, isFullscreen) => {
-            setIsFullscreen(isFullscreen);
-        });
-
-        window.electronAPI.getIsFullscreen();
-    }, []);
 
     return (
         <div

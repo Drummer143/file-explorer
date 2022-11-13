@@ -6,16 +6,18 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
     getDrives: () => ipcRenderer.send('get-drives'),
-    onDrivesLoaded: (callback: Function) =>
+    onDrivesLoaded: (callback: Function) => {
         ipcRenderer.on('drives-loaded', (event: Electron.IpcRendererEvent, drives: string[]) =>
             callback(event, drives)
-        ),
+        )
+    },
 
     readDirectory: (path: string) => ipcRenderer.send('read-directory', path),
-    onReadDirectory: (callback: Function) =>
+    onReadDirectory: (callback: Function) => {
         ipcRenderer.on('directory', (event: Electron.IpcRendererEvent, files: any) =>
             callback(event, files)
-        ),
+        )
+    },
 
     openFile: (path: string) => ipcRenderer.send('open-file', path),
 
@@ -25,10 +27,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     close: () => ipcRenderer.send('close'),
 
     getIsFullscreen: () => ipcRenderer.send('get-is-fullscreen'),
-    isFullscreen: (callback: Function) =>
+    isFullscreen: (callback: Function) => {
         ipcRenderer.once(
             'is-fullscreen',
             (event: Electron.IpcRendererEvent, isFullscreen: Boolean) =>
                 callback(event, isFullscreen)
         )
+    }
 });
