@@ -4,26 +4,30 @@ import FileButton from '../FileButton/FileButton';
 import GoogleIcon from '../GoogleIcon/GoogleIcon';
 
 import styles from './FileExplorer.module.scss';
+import { usePathStore, useHistoryStore } from './../../zustand/explorerStore';
 
 function FileExplorer() {
+    const { path: currentPath, updatePath } = usePathStore(state => state);
+    const { history, pushPath, popPath } = useHistoryStore(state => state)
+
     const [data, setData] = useState<CustomFile[]>([]);
-    const [currentPath, setCurrentPath] = useState<string>('');
     const [isWaitingFiles, setIsWaitingFiles] = useState(true);
     const [input, setInput] = useState(currentPath);
-    const [history] = useState<string[]>([]);
 
     const spanRef = useRef<HTMLSpanElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const fileContainerRef = useRef<HTMLDivElement>(null);
+
+    // const setPath = (newPath: string) => { useCurrentPath(state => state.updatePath(newPath)) };
 
     const handleOpenFile = (file: CustomFile) => {
         let newPath = currentPath ? `${currentPath}/${file.fileName}` : file.fileName;
         newPath = newPath.replace(/[\\/]{2,}|\//g, '/');
 
         if (file.isDirectory) {
-            history.push(currentPath);
+            pushPath(currentPath);
             setIsWaitingFiles(true);
-            setCurrentPath(newPath);
+            updatePath(newPath);
 
             fileContainerRef.current.scrollTo({ top: 0 });
 
@@ -42,13 +46,13 @@ function FileExplorer() {
     };
 
     const handleGoBack = () => {
-        const prevPath = history.pop();
+        const prevPath = popPath();
         if (prevPath) {
             window.electronAPI.readDirectory(prevPath);
         } else {
             window.electronAPI.getDrives();
         }
-        setCurrentPath(prevPath);
+        updatePath(prevPath);
     }
 
     const handlePathInputEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -59,7 +63,7 @@ function FileExplorer() {
                 window.electronAPI.getDrives();
             }
             inputRef.current.blur();
-            setCurrentPath(input);
+            updatePath(input);
         }
     };
 
@@ -113,6 +117,7 @@ function FileExplorer() {
                 </div>
 
                 <div
+                    data-ctx='explorer'
                     ref={fileContainerRef}
                     className={`${currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'
                         } ${isWaitingFiles && 'opacity-0'} ${data.length === 0 && 'min-h-[100px]'

@@ -107,7 +107,7 @@ app.on('activate', () => {
 ipcMain.on('get-drives', event => {
     exec('wmic logicaldisk get name', (error, stdout) => {
         if (error) {
-            console.log(error);
+            console.error(error);
         } else {
             const info = stdout
                 .split('\r\r\n')
@@ -124,7 +124,6 @@ ipcMain.on('read-directory', (event, path: string) => {
         const files = fs.readdirSync(`${path}\\`, { encoding: 'utf-8' }).map(file => {
             try {
                 const stats = fs.statSync(`${path}\\${file}`);
-                // console.log(file, JSON.stringify(stats, null, '\t'));
                 return {
                     fileName: file,
                     isFile: stats.isFile(),
@@ -132,7 +131,7 @@ ipcMain.on('read-directory', (event, path: string) => {
                     size: stats.size
                 };
             } catch (err) {
-                console.log(err);
+                console.error(err);
             }
         });
 
@@ -146,9 +145,9 @@ ipcMain.on('read-directory', (event, path: string) => {
 ipcMain.on('open-file', (event, path: string) => {
     exec(path, (error, stdout) => {
         if (error) {
-            console.log(error);
+            console.error(error);
         } else {
-            console.log(stdout);
+            console.info(stdout);
         }
     });
 });

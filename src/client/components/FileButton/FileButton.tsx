@@ -13,6 +13,8 @@ function FileButton({ file, onClick }: Props) {
 
     return (
         <div
+            data-ctx={isFile ? 'file' : 'folder'}
+            data-info={fileName}
             onClick={onClick}
             className={`flex cursor-pointer items-center flex-row px-3 py-2 rounded-lg bg-[var(--top-grey-dark)] gap-x-2 gap-y-1 transition hover:bg-[var(--bottom-grey-dark)] active:bg-[var(--bg-dark)] ${styles.wrapper}`}
         >
