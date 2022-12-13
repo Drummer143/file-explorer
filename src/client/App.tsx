@@ -5,8 +5,6 @@ import ContextMenu from './components/ContextMenu/ContextMenu';
 import FileExplorer from './components/FileExplorer/FileExplorer';
 import FrameWindowControlButtons from './components/FrameWindowControlButtons/FrameWindowControlButtons';
 
-// import styles from './App.module.scss';
-
 function App() {
     const [isFullscreen, setIsFullscreen] = useState(false);
 

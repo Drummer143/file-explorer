@@ -16,9 +16,9 @@ if (require('electron-squirrel-startup')) {
     app.quit();
 }
 
-const PATH_TO_WINDOW_LOGS = isDev
-    ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json'
-    : __dirname + 'windowConfig.json';
+// const PATH_TO_WINDOW_LOGS = isDev
+//     ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json'
+//     : __dirname + 'windowConfig.json';
 
 const createWindow = (): void => {
     // let windowConfig: Electron.BrowserWindowConstructorOptions;
@@ -54,20 +54,20 @@ const createWindow = (): void => {
         mainWindow.webContents.openDevTools();
     }
 
-    mainWindow.on('close', () => {
-        const windowConfig: Electron.BrowserWindowConstructorOptions = {
-            width: mainWindow.getBounds().width,
-            height: mainWindow.getBounds().height,
-            x: mainWindow.getBounds().x,
-            y: mainWindow.getBounds().y,
-            fullscreen: mainWindow.isFullScreen()
-            // webPreferences: {
-            //     devTools: mainWindow.webContents.isDevToolsOpened()
-            // }
-        };
+    // mainWindow.on('close', () => {
+    //     const windowConfig: Electron.BrowserWindowConstructorOptions = {
+    //         width: mainWindow.getBounds().width,
+    //         height: mainWindow.getBounds().height,
+    //         x: mainWindow.getBounds().x,
+    //         y: mainWindow.getBounds().y,
+    //         fullscreen: mainWindow.isFullScreen()
+    //         // webPreferences: {
+    //         //     devTools: mainWindow.webContents.isDevToolsOpened()
+    //         // }
+    //     };
 
-        fs.writeFileSync(PATH_TO_WINDOW_LOGS, JSON.stringify(windowConfig, null, '\t'));
-    });
+    //     fs.writeFileSync(PATH_TO_WINDOW_LOGS, JSON.stringify(windowConfig, null, '\t'));
+    // });
 
     ipcMain.on('get-is-fullscreen', event =>
         event.sender.send('is-fullscreen', mainWindow.isFullScreen())

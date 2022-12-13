@@ -95,3 +95,6 @@ out/
 .prettierrc.json
 .eslintrc.json
 iconNames.txt
+
+package-lock.json
+data-attributes-description.json

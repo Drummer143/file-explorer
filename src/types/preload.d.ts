@@ -5,7 +5,12 @@ export interface IElectronAPI {
     ) => void;
 
     readDirectory: (path: string) => void;
-    onReadDirectory: (callback: (event: Electron.IpcRendererEvent, files: any) => void) => void;
+    onReadDirectory: (
+        callback: (event: Electron.IpcRendererEvent, files: CustomFile[]) => void
+    ) => void;
+
+    // onNewFile: (callback: (event: Electron.IpcRendererEvent, file: CustomFile) => void) => void;
+    // onDeleteFile: (callback: (event: Electron.IpcRendererEvent, file: string) => void) => void;
 
     openFile: (path: string) => void;
 

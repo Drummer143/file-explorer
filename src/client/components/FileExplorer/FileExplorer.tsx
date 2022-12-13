@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import FileButton from '../FileButton/FileButton';
 import GoogleIcon from '../GoogleIcon/GoogleIcon';
 
 import styles from './FileExplorer.module.scss';
-import { usePathStore, useHistoryStore } from './../../zustand/explorerStore';
+import { useHistoryStore, usePathStore } from '../../zustand/explorerStores';
 
 function FileExplorer() {
     const { path: currentPath, updatePath } = usePathStore(state => state);
-    const { history, pushPath, popPath } = useHistoryStore(state => state)
+    const { history, pushPath, popPath } = useHistoryStore(state => state);
 
     const [data, setData] = useState<CustomFile[]>([]);
     const [isWaitingFiles, setIsWaitingFiles] = useState(true);
@@ -53,7 +53,7 @@ function FileExplorer() {
             window.electronAPI.getDrives();
         }
         updatePath(prevPath);
-    }
+    };
 
     const handlePathInputEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Enter' && currentPath !== input) {
@@ -107,7 +107,14 @@ function FileExplorer() {
                     ref={inputRef}
                     className={`absolute top-16 left-1/2 -translate-x-[calc(50%_+_25px)] min-w-[400px] max-w-[80%] gap-5 transition-[opacity,_width] grid grid-cols-[58px,_1fr] place-items-center`}
                 >
-                    <button onClick={handleGoBack} className={`h-[3.25rem] ${history.length === 0 && 'opacity-0 pointer-events-none'} w-[3.25rem] hover:`}><GoogleIcon iconName='arrow_back' size={40} /></button>
+                    <button
+                        onClick={handleGoBack}
+                        className={`h-[3.25rem] ${
+                            history.length === 0 && 'opacity-0 pointer-events-none'
+                        } w-[3.25rem] hover:`}
+                    >
+                        <GoogleIcon iconName="arrow_back" size={40} />
+                    </button>
                     <input
                         value={input}
                         onChange={handlePathInputChange}
@@ -117,12 +124,15 @@ function FileExplorer() {
                 </div>
 
                 <div
-                    data-ctx='explorer'
+                    data-ctx="explorer"
                     ref={fileContainerRef}
-                    className={`${currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'
-                        } ${isWaitingFiles && 'opacity-0'} ${data.length === 0 && 'min-h-[100px]'
-                        } max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer
-                        }`}
+                    className={`${
+                        currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'
+                    } ${isWaitingFiles && 'opacity-0'} ${
+                        data.length === 0 && 'min-h-[100px]'
+                    } max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${
+                        styles.filesContainer
+                    }`}
                 >
                     {data.length ? (
                         data.map(file => (
