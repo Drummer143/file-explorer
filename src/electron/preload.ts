@@ -32,5 +32,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
             (event: Electron.IpcRendererEvent, isFullscreen: Boolean) =>
                 callback(event, isFullscreen)
         );
-    }
+    },
+
+    onInDirChange: (callback: Function) => {
+        ipcRenderer.on('in-dir-change', (event: Electron.IpcRendererEvent, changes: OnInDirChangeProps) => callback(event, changes))
+    },
 });

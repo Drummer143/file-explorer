@@ -1,4 +1,6 @@
-export interface IElectronAPI {
+import { Event as WatcherEventType } from '@parcel/watcher'
+
+interface IElectronAPI {
     getDrives: () => void;
     onDrivesLoaded: (
         callback: (event: Electron.IpcRendererEvent, drives: string[]) => void
@@ -23,9 +25,17 @@ export interface IElectronAPI {
     isFullscreen: (
         callback: (event: Electron.IpcRendererEvent, isFullscreen: boolean) => void
     ) => void;
+
+    onInDirChange: (callback: (event: Electron.IpcRendererEvent, changes: OnInDirChangeProps) => void) => void
 }
 
 declare global {
+    type OnInDirChangeProps = {
+        delete: string[]
+        update: CustomFile[]
+        create: CustomFile[]
+    }
+
     interface Window {
         electronAPI: IElectronAPI;
     }

@@ -88,8 +88,24 @@ function FileExplorer() {
             setIsWaitingFiles(false);
         });
 
+        window.electronAPI.onInDirChange((event, changes) => {
+            setData(prev => {
+                prev = prev.filter(file => !changes.delete.find(f => f === file.fileName));
+                changes.create.forEach(file => {
+                    if (!prev.find(f => f.fileName === file.fileName)) {
+                        prev.push(file);
+                    }
+                })
+                setData(prev);
+
+                return prev;
+            })
+        })
+
         window.electronAPI.getDrives();
     }, []);
+
+    useEffect(() => console.log(data), [data.length])
 
     useEffect(() => setInput(currentPath), [currentPath]);
 
@@ -109,9 +125,8 @@ function FileExplorer() {
                 >
                     <button
                         onClick={handleGoBack}
-                        className={`h-[3.25rem] ${
-                            history.length === 0 && 'opacity-0 pointer-events-none'
-                        } w-[3.25rem] hover:`}
+                        className={`h-[3.25rem] ${history.length === 0 && 'opacity-0 pointer-events-none'
+                            } w-[3.25rem] hover:`}
                     >
                         <GoogleIcon iconName="arrow_back" size={40} />
                     </button>
@@ -126,18 +141,15 @@ function FileExplorer() {
                 <div
                     data-ctx="explorer"
                     ref={fileContainerRef}
-                    className={`${
-                        currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'
-                    } ${isWaitingFiles && 'opacity-0'} ${
-                        data.length === 0 && 'min-h-[100px]'
-                    } max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${
-                        styles.filesContainer
-                    }`}
+                    className={`${currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'
+                        } ${isWaitingFiles && 'opacity-0'} ${data.length === 0 && 'min-h-[100px]'
+                        } max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer
+                        }`}
                 >
                     {data.length ? (
-                        data.map(file => (
+                        data.map((file, i) => (
                             <FileButton
-                                key={file.fileName}
+                                key={file.fileName + i}
                                 file={file}
                                 onClick={() => handleOpenFile(file)}
                             />
