@@ -122,6 +122,7 @@ function FileExplorer() {
                     <GoBackButton onClickAdditional={() => setCanChangeNavBarSize(false)} />
 
                     <input
+                        tabIndex={2}
                         value={input}
                         onChange={handlePathInputChange}
                         onKeyDown={handlePathInputEnterPress}
@@ -136,6 +137,7 @@ function FileExplorer() {
                 </nav>
 
                 <div
+                    tabIndex={3}
                     data-ctx="explorer"
                     ref={fileContainerRef}
                     className={'max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 transition-[transform,_top,_left_,opacity] duration-500'
@@ -151,7 +153,7 @@ function FileExplorer() {
                             <FileButton
                                 key={file.fileName + i}
                                 file={file}
-                                onClick={() => handleOpenFile(file)}
+                                onDoubleClick={() => handleOpenFile(file)}
                             />
                         ))
                     ) : (
