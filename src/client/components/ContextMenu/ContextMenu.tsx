@@ -30,6 +30,7 @@ function ContextMenu() {
     const ctxRef = useRef<HTMLDivElement>(null);
 
     const menuSections: MenuSections = {
+        drive: [{ name: 'Open', onClick: (info: string) => window.electronAPI.openFile(`${prevPath}/${info}`) }],
         file: [
             { name: 'Open', onClick: (info: string) => window.electronAPI.openFile(`${prevPath}/${info}`) },
             { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${prevPath}/${info}`) }

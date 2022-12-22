@@ -23,7 +23,7 @@ function FileExplorer() {
         let newPath = currentPath ? `${currentPath}/${file.fileName}` : file.fileName;
         newPath = newPath.replace(/[\\/]{2,}|\//g, '/');
 
-        if (file.isDirectory) {
+        if (file.isDirectory || file.isDrive) {
             pushRoute(currentPath);
             setIsWaitingFiles(true);
             updatePath(newPath);
@@ -62,9 +62,8 @@ function FileExplorer() {
                 drives.map(drive => {
                     return {
                         fileName: drive,
-                        isFile: false,
-                        isDirectory: true,
-                        size: 0
+                        size: 0,
+                        isDrive: true
                     };
                 })
             );

@@ -117,7 +117,7 @@ const getFileInfo = (path: string, name: string) => {
             isFile: stats.isFile(),
             isDirectory: stats.isDirectory(),
             size: stats.size
-        };
+        } as CustomFile;
     } catch (error) {
         console.error(error);
     }

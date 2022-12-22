@@ -11,7 +11,7 @@ type Props = {
 };
 
 function FileButton({ file, onDoubleClick }: Props) {
-    const { isFile, size, fileName, isDirectory } = file;
+    const { isFile, size, fileName, isDirectory, isDrive } = file;
     const [ctx, setCtx] = useState('');
 
     const getFileButtonFromPoint = (x: number, y: number): HTMLElement | undefined => {
@@ -75,6 +75,8 @@ function FileButton({ file, onDoubleClick }: Props) {
             setCtx('file');
         } else if (isDirectory) {
             setCtx('folder');
+        } else if (isDrive) {
+            setCtx('drive');
         }
     }, []);
 
@@ -93,7 +95,9 @@ function FileButton({ file, onDoubleClick }: Props) {
             }
         >
             <GoogleIcon
-                className={`text-[50px] ${isDirectory && 'text-yellow-300'}`}
+                className={`text-[50px]`
+                    .concat(isDirectory || isDrive ? ' text-yellow-300' : '')
+                }
                 iconName={isFile ? 'draft' : 'folder'}
             />
             <div>
