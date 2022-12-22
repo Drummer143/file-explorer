@@ -5,13 +5,14 @@ import FileButton from '../FileButton/FileButton';
 import GoBackButton from '../GoBackButton/GoBackButton';
 
 import styles from './FileExplorer.module.scss';
+import useListenElectronEvents from '../../hooks/useListenElectronEvents';
 
 function FileExplorer() {
     const { path: currentPath, updatePath } = usePathStore(state => state);
     const { pushRoute } = useHistoryStore(state => state);
 
-    const [data, setData] = useState<CustomFile[]>([]);
-    const [isWaitingFiles, setIsWaitingFiles] = useState(true);
+    const [files, setFiles] = useState<CustomFile[]>([]);
+    const [isFilesLoading, setIsFilesLoading] = useState(true);
     const [input, setInput] = useState(currentPath);
     const [canChangeNavBarSize, setCanChangeNavBarSize] = useState(true);
 
@@ -25,7 +26,7 @@ function FileExplorer() {
 
         if (file.isDirectory || file.isDrive) {
             pushRoute(currentPath);
-            setIsWaitingFiles(true);
+            setIsFilesLoading(true);
             updatePath(newPath);
 
             fileContainerRef.current.scrollTo({ top: 0 });
@@ -56,46 +57,12 @@ function FileExplorer() {
         }
     };
 
-    useEffect(() => {
-        window.electronAPI.onDrivesLoaded((event, drives) => {
-            setData(
-                drives.map(drive => {
-                    return {
-                        fileName: drive,
-                        size: 0,
-                        isDrive: true
-                    };
-                })
-            );
+    useListenElectronEvents({
+        setFiles,
+        setIsFilesLoading
+    });
 
-            setIsWaitingFiles(false);
-        });
-
-        window.electronAPI.onReadDirectory((event, files) => {
-            setData(files.reverse().sort(file => file.isFile ? 1 : -1));
-            setIsWaitingFiles(false);
-        });
-
-        window.electronAPI.onInDirChange((event, changes) => {
-            setData(prev => {
-                prev = prev.filter(file => !changes.delete.find(f => f === file.fileName));
-                changes.create.forEach(file => {
-                    if (!prev.find(f => f.fileName === file.fileName)) {
-                        prev.push(file);
-                    }
-                })
-                setData(prev);
-
-                return prev;
-            })
-        })
-
-        if (currentPath) {
-            window.electronAPI.readDirectory(currentPath);
-        } else {
-            window.electronAPI.getDrives();
-        }
-    }, []);
+    useEffect(() => window.electronAPI.getDrives(), []);
 
     useEffect(() => setInput(currentPath), [currentPath]);
 
@@ -141,14 +108,14 @@ function FileExplorer() {
                     ref={fileContainerRef}
                     className={'max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 transition-[transform,_top,_left_,opacity] duration-500'
                         .concat(' scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl')
-                        .concat(' ', (currentPath && data.length !== 0) ? 'top-40' : 'top-1/2 -translate-y-1/2')
-                        .concat(isWaitingFiles ? ' opacity-0' : '')
-                        .concat(data.length === 0 ? ' min-h-[100px]' : '')
+                        .concat(' ', (currentPath && files.length !== 0) ? 'top-40' : 'top-1/2 -translate-y-1/2')
+                        .concat(isFilesLoading ? ' opacity-0' : '')
+                        .concat(files.length === 0 ? ' min-h-[100px]' : '')
                         .concat(' ', styles.filesContainer)
                     }
                 >
-                    {data.length ? (
-                        data.map((file, i) => (
+                    {files.length ? (
+                        files.map((file, i) => (
                             <FileButton
                                 key={file.fileName + i}
                                 file={file}

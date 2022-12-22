@@ -28,6 +28,8 @@ interface IElectronAPI {
     ) => void;
 
     onInDirChange: (callback: (event: Electron.IpcRendererEvent, changes: UpdatedFiles) => void) => void
+
+    unsubscribe: (event: 'drives-loaded' | 'directory' | 'in-dir-change') => void,
 }
 
 declare global {

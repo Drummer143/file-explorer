@@ -36,6 +36,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     },
 
     onInDirChange: (callback: Function) => {
-        ipcRenderer.on('in-dir-change', (event: Electron.IpcRendererEvent, changes: OnInDirChangeProps) => callback(event, changes))
+        ipcRenderer.on('in-dir-change', (event: Electron.IpcRendererEvent, changes: UpdatedFiles) => callback(event, changes))
     },
+
+    unsubscribe: (event: 'drives-loaded' | 'directory' | 'in-dir-change') => ipcRenderer.removeAllListeners(event),
 });
