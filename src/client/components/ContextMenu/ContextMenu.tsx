@@ -22,7 +22,7 @@ type MenuSections = {
 
 function ContextMenu() {
     const { path: prevPath, updatePath } = usePathStore(state => state);
-    const { pushPath } = useHistoryStore(state => state);
+    const { pushRoute } = useHistoryStore(state => state);
 
     const [currentMenuSections] = useState<{ section: string; info: string }[]>([]);
     const [contextMenuParams, setContextMenuParams] = useState<ContextMenuProps>(defaultMenuParams);
@@ -31,51 +31,19 @@ function ContextMenu() {
 
     const menuSections: MenuSections = {
         file: [
-            {
-                name: 'Open',
-                onClick: (info: string) => {
-                    window.electronAPI.openFile(`${prevPath}/${info}`);
-
-                    setContextMenuParams(defaultMenuParams);
-                }
-            },
-            {
-                name: 'Delete',
-                onClick: (info) => {
-                    const path = `${prevPath}/${info}`
-                    window.electronAPI.deleteFile(path);
-
-                    setContextMenuParams(defaultMenuParams);
-                }
-            }
+            { name: 'Open', onClick: (info: string) => window.electronAPI.openFile(`${prevPath}/${info}`) },
+            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${prevPath}/${info}`) }
         ],
         folder: [
             {
-                name: 'Open',
-                onClick: (info) => {
-                    let path = '';
-                    if (prevPath) {
-                        path = `${prevPath}/${info}`;
-                    } else {
-                        path = info;
-                    }
-
-                    pushPath(prevPath);
-                    window.electronAPI.readDirectory(path);
+                name: 'Open', onClick: (info) => {
+                    const path = prevPath ? `${prevPath}/${info}` : info;
+                    pushRoute(path);
                     updatePath(path);
-
-                    setContextMenuParams(defaultMenuParams);
+                    window.electronAPI.readDirectory(path);
                 }
             },
-            {
-                name: 'Delete',
-                onClick: (info) => {
-                    const path = `${prevPath}/${info}`
-                    window.electronAPI.deleteFile(path);
-
-                    setContextMenuParams(defaultMenuParams);
-                }
-            }
+            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${prevPath}/${info}`) }
         ]
     }
 
@@ -86,6 +54,12 @@ function ContextMenu() {
             document.removeEventListener('click', handleHideContextMenu);
         }
     };
+
+    const handleClick = (onClick: () => void) => {
+        onClick();
+
+        setContextMenuParams(defaultMenuParams);
+    }
 
     const handleOpenContextMenu = (e: MouseEvent) => {
         if (e.button === 2) {
@@ -183,7 +157,7 @@ function ContextMenu() {
                                 }
                             >
                                 {menuSections[section].map(({ onClick, name }) => (
-                                    <button key={name} onClick={() => onClick(info)}>
+                                    <button key={name} onClick={() => handleClick(() => onClick(info))}>
                                         {name}
                                     </button>
                                 ))}

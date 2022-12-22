@@ -4,3 +4,9 @@ type CustomFile = {
     isDirectory: boolean;
     size: number;
 };
+
+type UpdatedFiles = {
+    delete: string[]
+    update: CustomFile[]
+    create: CustomFile[]
+}

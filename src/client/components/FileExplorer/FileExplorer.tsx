@@ -8,7 +8,7 @@ import styles from './FileExplorer.module.scss';
 
 function FileExplorer() {
     const { path: currentPath, updatePath } = usePathStore(state => state);
-    const { history, pushPath, popPath } = useHistoryStore(state => state);
+    const { pushRoute } = useHistoryStore(state => state);
 
     const [data, setData] = useState<CustomFile[]>([]);
     const [isWaitingFiles, setIsWaitingFiles] = useState(true);
@@ -24,7 +24,7 @@ function FileExplorer() {
         newPath = newPath.replace(/[\\/]{2,}|\//g, '/');
 
         if (file.isDirectory) {
-            pushPath(currentPath);
+            pushRoute(currentPath);
             setIsWaitingFiles(true);
             updatePath(newPath);
 

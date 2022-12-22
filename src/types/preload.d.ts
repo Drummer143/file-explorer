@@ -27,16 +27,10 @@ interface IElectronAPI {
         callback: (event: Electron.IpcRendererEvent, isFullscreen: boolean) => void
     ) => void;
 
-    onInDirChange: (callback: (event: Electron.IpcRendererEvent, changes: OnInDirChangeProps) => void) => void
+    onInDirChange: (callback: (event: Electron.IpcRendererEvent, changes: UpdatedFiles) => void) => void
 }
 
 declare global {
-    type OnInDirChangeProps = {
-        delete: string[]
-        update: CustomFile[]
-        create: CustomFile[]
-    }
-
     interface Window {
         electronAPI: IElectronAPI;
     }

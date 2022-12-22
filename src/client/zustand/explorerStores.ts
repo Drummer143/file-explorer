@@ -2,16 +2,16 @@ import create from 'zustand';
 
 interface HistoryStore {
     history: string[];
-    pushPath: (newPath: string) => void;
-    popPath: () => string;
+    pushRoute: (newPath: string) => void;
+    popRoute: () => string;
     reset: () => void;
 }
 
 const useHistoryStore = create<HistoryStore>(
     set => ({
         history: [],
-        pushPath: newPath => set(state => ({ history: state.history.concat(newPath) })),
-        popPath: () => {
+        pushRoute: newPath => set(state => ({ history: state.history.concat(newPath) })),
+        popRoute    : () => {
             let lastPath = '';
             set(state => {
                 const hist = state.history.concat();

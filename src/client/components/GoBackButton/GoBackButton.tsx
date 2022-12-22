@@ -7,10 +7,10 @@ type Props = {
 
 function GoBackButton({ onClickAdditional }: Props) {
     const { updatePath } = usePathStore(state => state);
-    const { history, popPath } = useHistoryStore(state => state);
+    const { history, popRoute } = useHistoryStore(state => state);
 
     const handleClick = () => {
-        const prevPath = popPath();
+        const prevPath = popRoute();
         if (prevPath) {
             window.electronAPI.readDirectory(prevPath);
         } else {
