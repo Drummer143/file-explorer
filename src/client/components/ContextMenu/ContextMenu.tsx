@@ -34,7 +34,16 @@ function ContextMenu() {
             {
                 name: 'Open',
                 onClick: (info: string) => {
-                    console.log(`${prevPath}/${info}`);
+                    window.electronAPI.openFile(`${prevPath}/${info}`);
+
+                    setContextMenuParams(defaultMenuParams);
+                }
+            },
+            {
+                name: 'Delete',
+                onClick: (info) => {
+                    const path = `${prevPath}/${info}`
+                    window.electronAPI.deleteFile(path);
 
                     setContextMenuParams(defaultMenuParams);
                 }
@@ -43,7 +52,7 @@ function ContextMenu() {
         folder: [
             {
                 name: 'Open',
-                onClick: (info: string) => {
+                onClick: (info) => {
                     let path = '';
                     if (prevPath) {
                         path = `${prevPath}/${info}`;
@@ -57,9 +66,18 @@ function ContextMenu() {
 
                     setContextMenuParams(defaultMenuParams);
                 }
+            },
+            {
+                name: 'Delete',
+                onClick: (info) => {
+                    const path = `${prevPath}/${info}`
+                    window.electronAPI.deleteFile(path);
+
+                    setContextMenuParams(defaultMenuParams);
+                }
             }
         ]
-    };
+    }
 
     const handleHideContextMenu = (e: MouseEvent) => {
         if (e.button !== 2 && !e.composedPath().includes(ctxRef.current)) {
@@ -143,10 +161,9 @@ function ContextMenu() {
     return (
         <div
             ref={ctxRef}
-            className={`${
-                !contextMenuParams.shouldDisplay &&
-                'opacity-0 top-[200vh] left-[200vw] pointer-events-none'
-            } transition-opacity bg-[var(--menu-dark)] min-w-[150px] border border-[var(--top-grey-dark)] p-1 border-solid absolute z-[100]`}
+            className={'transition-opacity bg-[var(--menu-dark)] min-w-[150px] border border-[var(--top-grey-dark)] p-1 border-solid absolute z-[100]'
+                .concat(!contextMenuParams.shouldDisplay ? ' opacity-0 top-[200vh] left-[200vw] pointer-events-none hidden' : '')
+            }
             style={{ top: contextMenuParams.y, left: contextMenuParams.x }}
         >
             {contextMenuParams.shouldDisplay &&
@@ -159,10 +176,11 @@ function ContextMenu() {
                             <legend className={`text-xs relative ${styles.heading}`}>
                                 {section}
                             </legend>
+
                             <div
-                                className={`${
-                                    i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1'
-                                }`}
+                                className={'flex flex-col items-start gap-2 pl-2'
+                                    .concat(' ', i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1')
+                                }
                             >
                                 {menuSections[section].map(({ onClick, name }) => (
                                     <button key={name} onClick={() => onClick(info)}>

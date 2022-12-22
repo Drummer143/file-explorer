@@ -1,5 +1,4 @@
 import create from 'zustand';
-import { persist } from 'zustand/middleware';
 
 interface HistoryStore {
     history: string[];
@@ -31,10 +30,13 @@ interface PathStore {
     reset: () => void;
 }
 
-const usePathStore = create<PathStore>(set => ({
-    path: '',
-    updatePath: newPath => set(() => ({ path: newPath })),
-    reset: () => set({ path: '' })
-}));
+//@ts-ignore
+const usePathStore = create<PathStore>(
+    set => ({
+        path: '',
+        updatePath: newPath => set(() => ({ path: newPath })),
+        reset: () => set({ path: '' })
+    })
+);
 
 export { useHistoryStore, usePathStore };

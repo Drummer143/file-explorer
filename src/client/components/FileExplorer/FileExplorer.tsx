@@ -18,8 +18,6 @@ function FileExplorer() {
     const inputRef = useRef<HTMLInputElement>(null);
     const fileContainerRef = useRef<HTMLDivElement>(null);
 
-    // const setPath = (newPath: string) => { useCurrentPath(state => state.updatePath(newPath)) };
-
     const handleOpenFile = (file: CustomFile) => {
         let newPath = currentPath ? `${currentPath}/${file.fileName}` : file.fileName;
         newPath = newPath.replace(/[\\/]{2,}|\//g, '/');
@@ -102,7 +100,11 @@ function FileExplorer() {
             })
         })
 
-        window.electronAPI.getDrives();
+        if (currentPath) {
+            window.electronAPI.readDirectory(currentPath);
+        } else {
+            window.electronAPI.getDrives();
+        }
     }, []);
 
     useEffect(() => console.log(data), [data.length])

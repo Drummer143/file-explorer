@@ -158,6 +158,8 @@ ipcMain.on('read-directory', (event, pathToDir: string) => {
             console.error(error);
         }
 
+        if (events.length === 0) { return }
+
         if (events) {
             const newFiles: CustomFile[] = [];
             const deletedFiles: string[] = [];
@@ -167,13 +169,9 @@ ipcMain.on('read-directory', (event, pathToDir: string) => {
                 const parentDir = path.basename(path.join(event.path, '..'))
 
                 return parentDir === path.basename(pathToDir);
-
-                // if (parentDir === path.basename(pathToDir)) {
-                //     return event;
-                // } else {
-                //     return null;
-                // }
             })
+
+            if (events.length === 0) { return }
 
             events.forEach(event => {
                 switch (event.type) {
@@ -197,9 +195,7 @@ ipcMain.on('read-directory', (event, pathToDir: string) => {
                         }
                 }
             })
-            // .filter(event => event);
 
-            console.log(events);
             event.sender.send('in-dir-change', { create: newFiles, delete: deletedFiles, update: updatedFiles } as OnInDirChangeProps)
         }
     }
@@ -210,14 +206,6 @@ ipcMain.on('read-directory', (event, pathToDir: string) => {
         watcher.unsubscribe(`${pathToDir}\\`, watchForDirectory)
         unsubscribe = null;
     };
-
-    // watcher = fs.watch(`${path}\\`, { encoding: 'utf-8', recursive: false }, (event, filename) => {
-    //     if (event === 'change') {
-    //         console.log(`event: ${event}, filename: ${filename}, ${!!filename}`);
-    //     } else {
-    //         console.log(`event: ${event}, filename: ${filename}, ${!!filename}`);
-    //     }
-    // });
 });
 
 ipcMain.on('open-file', (event, pathToFile: string) => {
@@ -229,3 +217,7 @@ ipcMain.on('open-file', (event, pathToFile: string) => {
         }
     });
 });
+
+ipcMain.on('delete-file', (event, pathToFile: string) => {
+    fs.rmSync(pathToFile, { recursive: true })
+})

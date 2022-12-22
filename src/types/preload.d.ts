@@ -15,6 +15,7 @@ interface IElectronAPI {
     // onDeleteFile: (callback: (event: Electron.IpcRendererEvent, file: string) => void) => void;
 
     openFile: (path: string) => void;
+    deleteFile: (path: string) => void
 
     minimize: () => void;
     restoreToWindow: () => void;
