@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import styles from './ContextMenu.module.scss';
-import { useHistoryStore, usePathStore } from '../../zustand/explorerStores';
+import { useHistoryStore } from '../../stores/explorerStores';
 
 type ContextMenuProps = {
     shouldDisplay: boolean;
@@ -21,8 +21,7 @@ type MenuSections = {
 };
 
 function ContextMenu() {
-    const { path: prevPath, updatePath } = usePathStore(state => state);
-    const { pushRoute } = useHistoryStore(state => state);
+    const { pushRoute, currentPath } = useHistoryStore(state => state);
 
     const [currentMenuSections] = useState<{ section: string; info: string }[]>([]);
     const [contextMenuParams, setContextMenuParams] = useState<ContextMenuProps>(defaultMenuParams);
@@ -30,21 +29,28 @@ function ContextMenu() {
     const ctxRef = useRef<HTMLDivElement>(null);
 
     const menuSections: MenuSections = {
-        drive: [{ name: 'Open', onClick: (info: string) => window.electronAPI.openFile(`${prevPath}/${info}`) }],
+        drive: [
+            {
+                name: 'Open', onClick: (info) => {
+                    const path = currentPath ? `${currentPath}/${info}` : info;
+                    pushRoute(path);
+                    window.electronAPI.readDirectory(path);
+                }
+            }
+        ],
         file: [
-            { name: 'Open', onClick: (info: string) => window.electronAPI.openFile(`${prevPath}/${info}`) },
-            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${prevPath}/${info}`) }
+            { name: 'Open', onClick: (info: string) => window.electronAPI.openFile(`${currentPath}/${info}`) },
+            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${currentPath}/${info}`) }
         ],
         folder: [
             {
                 name: 'Open', onClick: (info) => {
-                    const path = prevPath ? `${prevPath}/${info}` : info;
+                    const path = currentPath ? `${currentPath}/${info}` : info;
                     pushRoute(path);
-                    updatePath(path);
                     window.electronAPI.readDirectory(path);
                 }
             },
-            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${prevPath}/${info}`) }
+            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${currentPath}/${info}`) }
         ]
     }
 

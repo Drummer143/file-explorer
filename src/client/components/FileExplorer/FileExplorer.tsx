@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useHistoryStore, usePathStore } from '../../zustand/explorerStores';
+import { useHistoryStore } from '../../stores/explorerStores';
 import FileButton from '../FileButton/FileButton';
 import GoBackButton from '../GoBackButton/GoBackButton';
-
-import styles from './FileExplorer.module.scss';
 import useListenElectronEvents from '../../hooks/useListenElectronEvents';
 
+import styles from './FileExplorer.module.scss';
+
 function FileExplorer() {
-    const { path: currentPath, updatePath } = usePathStore(state => state);
-    const { pushRoute } = useHistoryStore(state => state);
+    const { pushRoute, currentPath, history } = useHistoryStore(state => state);
 
     const [files, setFiles] = useState<CustomFile[]>([]);
     const [isFilesLoading, setIsFilesLoading] = useState(true);
-    const [input, setInput] = useState(currentPath);
+    const [input, setInput] = useState<string>(currentPath);
     const [canChangeNavBarSize, setCanChangeNavBarSize] = useState(true);
 
     const spanRef = useRef<HTMLSpanElement>(null);
@@ -25,9 +24,8 @@ function FileExplorer() {
         newPath = newPath.replace(/[\\/]{2,}|\//g, '/');
 
         if (file.isDirectory || file.isDrive) {
-            pushRoute(currentPath);
+            pushRoute(newPath);
             setIsFilesLoading(true);
-            updatePath(newPath);
 
             fileContainerRef.current.scrollTo({ top: 0 });
 
@@ -47,13 +45,14 @@ function FileExplorer() {
 
     const handlePathInputEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Enter' && currentPath !== input) {
+            setIsFilesLoading(true);
             if (input) {
                 window.electronAPI.readDirectory(input);
             } else {
                 window.electronAPI.getDrives();
             }
+            pushRoute(input);
             inputRef.current.blur();
-            updatePath(input);
         }
     };
 
@@ -71,6 +70,8 @@ function FileExplorer() {
             inputRef.current.style.width = `${spanRef.current.clientWidth + 20 + 100}px`;
         }
     }, [input, canChangeNavBarSize]);
+
+    useEffect(() => console.log(history), [history.length]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import { useHistoryStore, usePathStore } from "../../zustand/explorerStores";
+import { useHistoryStore } from "../../stores/explorerStores";
 import GoogleIcon from "../GoogleIcon/GoogleIcon";
 
 type Props = {
@@ -6,17 +6,16 @@ type Props = {
 }
 
 function GoBackButton({ onClickAdditional }: Props) {
-    const { updatePath } = usePathStore(state => state);
     const { history, popRoute } = useHistoryStore(state => state);
 
     const handleClick = () => {
-        const prevPath = popRoute();
-        if (prevPath) {
-            window.electronAPI.readDirectory(prevPath);
+        const currentPath = popRoute();
+
+        if (currentPath) {
+            window.electronAPI.readDirectory(currentPath);
         } else {
             window.electronAPI.getDrives();
         }
-        updatePath(prevPath);
 
         onClickAdditional();
     };
