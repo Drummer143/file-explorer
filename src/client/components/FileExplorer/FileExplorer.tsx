@@ -82,7 +82,7 @@ function FileExplorer() {
         });
 
         window.electronAPI.onReadDirectory((event, files) => {
-            setData(files);
+            setData(files.reverse().sort(file => file.isFile ? 1 : -1));
             setIsWaitingFiles(false);
         });
 
@@ -107,8 +107,6 @@ function FileExplorer() {
         }
     }, []);
 
-    useEffect(() => console.log(data), [data.length])
-
     useEffect(() => setInput(currentPath), [currentPath]);
 
     useEffect(() => {
@@ -123,7 +121,9 @@ function FileExplorer() {
             <div>
                 <div
                     ref={inputRef}
-                    className={`absolute top-16 left-1/2 -translate-x-[calc(50%_+_25px)] min-w-[400px] max-w-[80%] gap-5 transition-[opacity,_width] grid grid-cols-[58px,_1fr] place-items-center`}
+                    className={'absolute top-16 left-1/2 -translate-x-[calc(50%_+_25px)] min-w-[400px] max-w-[80%]'
+                        .concat(' gap-5 transition-[opacity,_width] grid grid-cols-[58px,_1fr] place-items-center')
+                    }
                 >
                     <button
                         onClick={handleGoBack}
@@ -132,21 +132,30 @@ function FileExplorer() {
                     >
                         <GoogleIcon iconName="arrow_back" size={40} />
                     </button>
+
                     <input
                         value={input}
                         onChange={handlePathInputChange}
                         onKeyDown={handlePathInputEnterPress}
-                        className={`text-[var(--secondary-text-dark)] w-full px-2 pt-1 pb-2 border-solid border border-transparent text-center rounded-2xl transition delay-50 duration-300 text-4xl leading-[3rem] hover:border-[var(--top-grey-dark)] focus:text-[var(--primary-text-dark)] ${styles.path}`}
+                        className={'text-[var(--secondary-text-dark)] w-full px-2 pt-1 pb-2 border-solid border border-transparent'
+                            .concat(' text-center rounded-2xl transition delay-50 duration-300 text-4xl leading-[3rem]')
+                            .concat(' hover:border-[var(--top-grey-dark)]')
+                            .concat(' focus:text-[var(--primary-text-dark)]')
+                            .concat(styles.path)
+                        }
                     />
                 </div>
 
                 <div
                     data-ctx="explorer"
                     ref={fileContainerRef}
-                    className={`${currentPath && data.length !== 0 ? 'top-40' : 'top-1/2 -translate-y-1/2'
-                        } ${isWaitingFiles && 'opacity-0'} ${data.length === 0 && 'min-h-[100px]'
-                        } max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl ${styles.filesContainer
-                        }`}
+                    className={'max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2'
+                        .concat(' scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl')
+                        .concat(' ', (currentPath && data.length !== 0) ? 'top-40' : 'top-1/2 -translate-y-1/2')
+                        .concat(isWaitingFiles ? ' opacity-0' : '')
+                        .concat(data.length === 0 ? ' min-h-[100px]' : '')
+                        .concat(' ', styles.filesContainer)
+                    }
                 >
                     {data.length ? (
                         data.map((file, i) => (
