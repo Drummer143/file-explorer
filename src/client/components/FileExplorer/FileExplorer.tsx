@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useHistoryStore, usePathStore } from '../../zustand/explorerStores';
 import FileButton from '../FileButton/FileButton';
-import GoogleIcon from '../GoogleIcon/GoogleIcon';
+import GoBackButton from '../GoBackButton/GoBackButton';
 
 import styles from './FileExplorer.module.scss';
-import { useHistoryStore, usePathStore } from '../../zustand/explorerStores';
 
 function FileExplorer() {
     const { path: currentPath, updatePath } = usePathStore(state => state);
@@ -13,6 +13,7 @@ function FileExplorer() {
     const [data, setData] = useState<CustomFile[]>([]);
     const [isWaitingFiles, setIsWaitingFiles] = useState(true);
     const [input, setInput] = useState(currentPath);
+    const [canChangeNavBarSize, setCanChangeNavBarSize] = useState(true);
 
     const spanRef = useRef<HTMLSpanElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -41,16 +42,6 @@ function FileExplorer() {
 
     const handlePathInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
-    };
-
-    const handleGoBack = () => {
-        const prevPath = popPath();
-        if (prevPath) {
-            window.electronAPI.readDirectory(prevPath);
-        } else {
-            window.electronAPI.getDrives();
-        }
-        updatePath(prevPath);
     };
 
     const handlePathInputEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -110,46 +101,44 @@ function FileExplorer() {
     useEffect(() => setInput(currentPath), [currentPath]);
 
     useEffect(() => {
-        inputRef.current.style.width = `${spanRef.current.clientWidth + 20 + 80}px`;
-    }, [input]);
+        if (canChangeNavBarSize) {
+            inputRef.current.style.width = `${spanRef.current.clientWidth + 20 + 100}px`;
+        }
+    }, [input, canChangeNavBarSize]);
 
     return (
         <>
-            <span ref={spanRef} className={'absolute text-4xl px-0.5 top-[-1000px] left-[-1000px]'}>
+            <span ref={spanRef} className={'absolute text-4xl px-0.5 top-[-1000px] left-[-1000px] invisible pointer-events-none'}>
                 {input}
             </span>
             <div>
-                <div
+                <nav
                     ref={inputRef}
+                    onMouseLeave={() => setCanChangeNavBarSize(true)}
                     className={'absolute top-16 left-1/2 -translate-x-[calc(50%_+_25px)] min-w-[400px] max-w-[80%]'
                         .concat(' gap-5 transition-[opacity,_width] grid grid-cols-[58px,_1fr] place-items-center')
                     }
                 >
-                    <button
-                        onClick={handleGoBack}
-                        className={`h-[3.25rem] ${history.length === 0 && 'opacity-0 pointer-events-none'
-                            } w-[3.25rem] hover:`}
-                    >
-                        <GoogleIcon iconName="arrow_back" size={40} />
-                    </button>
+                    <GoBackButton onClickAdditional={() => setCanChangeNavBarSize(false)} />
 
                     <input
                         value={input}
                         onChange={handlePathInputChange}
                         onKeyDown={handlePathInputEnterPress}
-                        className={'text-[var(--secondary-text-dark)] w-full px-2 pt-1 pb-2 border-solid border border-transparent'
+                        onFocus={() => setCanChangeNavBarSize(true)}
+                        className={'text-[var(--secondary-text-dark)] w-full px-5 pt-1 pb-2 border-solid border border-transparent'
                             .concat(' text-center rounded-2xl transition delay-50 duration-300 text-4xl leading-[3rem]')
                             .concat(' hover:border-[var(--top-grey-dark)]')
                             .concat(' focus:text-[var(--primary-text-dark)]')
-                            .concat(styles.path)
+                            .concat(' ', styles.pathInput)
                         }
                     />
-                </div>
+                </nav>
 
                 <div
                     data-ctx="explorer"
                     ref={fileContainerRef}
-                    className={'max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2'
+                    className={'max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 transition-[transform,_top,_left_,opacity] duration-500'
                         .concat(' scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl')
                         .concat(' ', (currentPath && data.length !== 0) ? 'top-40' : 'top-1/2 -translate-y-1/2')
                         .concat(isWaitingFiles ? ' opacity-0' : '')
