@@ -1,7 +1,3 @@
-:root {
-    --file-list-gap: 0.5rem;
-}
-
 .pathInput:focus {
     background: repeating-linear-gradient(
         90deg,
@@ -10,12 +6,4 @@
         #404040 75%,
         #121212 100%
     );
-}
-
-.filesContainer::-webkit-scrollbar {
-    opacity: 0;
-}
-
-.filesContainer::-webkit-scrollbar:hover {
-    opacity: 1;
 }
