@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import styles from './ContextMenu.module.scss';
 import { useHistoryStore } from '../../stores/explorerStores';
+import { useCMCStore } from '../../stores/CMCStore';
 
 type ContextMenuProps = {
     shouldDisplay: boolean;
@@ -21,6 +22,7 @@ type MenuSections = {
 };
 
 function ContextMenu() {
+    const { setCurrentEditingFile } = useCMCStore(state => state);
     const { pushRoute, currentPath } = useHistoryStore(state => state);
 
     const [currentMenuSections] = useState<{ section: string; info: string }[]>([]);
@@ -42,11 +44,18 @@ function ContextMenu() {
         file: [
             {
                 name: 'Open',
-                onClick: (info: string) => window.electronAPI.openFile(`${currentPath}/${info}`)
+                onClick: info => window.electronAPI.openFile(`${currentPath}/${info}`)
             },
             {
                 name: 'Delete',
                 onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
+            },
+            {
+                name: 'Rename',
+                onClick: (info) => {
+                    console.log(`${currentPath}/${info}`);
+                    setCurrentEditingFile(info);
+                }
             }
         ],
         folder: [
@@ -61,6 +70,13 @@ function ContextMenu() {
             {
                 name: 'Delete',
                 onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
+            },
+            {
+                name: 'Rename',
+                onClick: (info) => {
+                    console.log(`${currentPath}/${info}`);
+                    setCurrentEditingFile(info);
+                }
             }
         ]
     };

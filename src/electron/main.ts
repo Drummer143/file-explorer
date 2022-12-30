@@ -218,10 +218,17 @@ const openFile = (event: IpcMainEvent, pathToFile: string) => {
     });
 };
 
-const deleteFile = (event: IpcMainEvent, pathToFile: string) =>
+const deleteFile = (event: IpcMainEvent, pathToFile: string) => {
     fs.rmSync(pathToFile, { recursive: true });
+}
+
+const renameFile = (event: IpcMainEvent, oldPath: string, newPath: string) => {
+    console.log(oldPath, newPath);
+    fs.renameSync(oldPath, newPath);
+}
 
 ipcMain.on('get-drives', readDrives);
 ipcMain.on('read-directory', readDirectory);
 ipcMain.on('open-file', openFile);
 ipcMain.on('delete-file', deleteFile);
+ipcMain.on('rename-file', renameFile)

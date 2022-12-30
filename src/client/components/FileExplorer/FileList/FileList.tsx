@@ -1,9 +1,10 @@
 import { useRef } from 'react';
 
 import { useHistoryStore } from '../../../stores/explorerStores';
-import FileButton from '../../FileButton/FileButton';
+import FileButton from '../FileButton/FileButton';
 
 import styles from './FileList.module.scss';
+import { useState } from 'react';
 
 type Props = {
     isFilesLoading: boolean
@@ -14,6 +15,8 @@ type Props = {
 
 function FileList({ files, isFilesLoading, setIsFilesLoading }: Props) {
     const { pushRoute, currentPath } = useHistoryStore(state => state);
+
+    const [currentRenamingFile, setCurrentRenamingFile] = useState<string | null>(null)
 
     const fileContainerRef = useRef<HTMLDivElement>(null);
 

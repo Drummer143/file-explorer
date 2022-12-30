@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     openFile: (path: string) => ipcRenderer.send('open-file', path),
     deleteFile: (path: string) => ipcRenderer.send('delete-file', path),
+    renameFile: (oldPath: string, newPath: string) => ipcRenderer.send('rename-file', oldPath, newPath),
 
     minimize: () => ipcRenderer.send('minimize'),
     restoreToWindow: () => ipcRenderer.send('restore-to-window'),
