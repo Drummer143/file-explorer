@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 type Props = {
-    setFiles: React.Dispatch<React.SetStateAction<CustomFile[]>>
-    setIsFilesLoading: React.Dispatch<React.SetStateAction<boolean>>
-}
+    setFiles: React.Dispatch<React.SetStateAction<CustomFile[]>>;
+    setIsFilesLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const useListenElectronEvents = ({ setFiles, setIsFilesLoading }: Props) => {
     const onDrivesLoaded = (event: Electron.IpcRendererEvent, drives: string[]) => {
@@ -15,12 +15,12 @@ const useListenElectronEvents = ({ setFiles, setIsFilesLoading }: Props) => {
             }))
         );
         setIsFilesLoading(false);
-    }
+    };
 
     const onReadDirectory = (event: Electron.IpcRendererEvent, files: CustomFile[]) => {
-        setFiles(files.reverse().sort(file => file.isFile ? 1 : -1));
+        setFiles(files.reverse().sort(file => (file.isFile ? 1 : -1)));
         setIsFilesLoading(false);
-    }
+    };
 
     const onInDirChange = (event: Electron.IpcRendererEvent, changes: UpdatedFiles) => {
         setFiles(prev => {
@@ -29,12 +29,12 @@ const useListenElectronEvents = ({ setFiles, setIsFilesLoading }: Props) => {
                 if (!prev.find(f => f.fileName === file.fileName)) {
                     prev.push(file);
                 }
-            })
+            });
 
             return prev;
-        })
+        });
         setIsFilesLoading(false);
-    }
+    };
 
     useEffect(() => {
         window.electronAPI.onDrivesLoaded(onDrivesLoaded);
@@ -45,8 +45,8 @@ const useListenElectronEvents = ({ setFiles, setIsFilesLoading }: Props) => {
             window.electronAPI.unsubscribe('directory');
             window.electronAPI.unsubscribe('in-dir-change');
             window.electronAPI.unsubscribe('drives-loaded');
-        }
+        };
     }, []);
-}
+};
 
 export default useListenElectronEvents;

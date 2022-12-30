@@ -1,4 +1,4 @@
-import { Event as WatcherEventType } from '@parcel/watcher'
+import { Event as WatcherEventType } from '@parcel/watcher';
 
 interface IElectronAPI {
     getDrives: () => void;
@@ -15,7 +15,7 @@ interface IElectronAPI {
     // onDeleteFile: (callback: (event: Electron.IpcRendererEvent, file: string) => void) => void;
 
     openFile: (path: string) => void;
-    deleteFile: (path: string) => void
+    deleteFile: (path: string) => void;
 
     minimize: () => void;
     restoreToWindow: () => void;
@@ -27,9 +27,11 @@ interface IElectronAPI {
         callback: (event: Electron.IpcRendererEvent, isFullscreen: boolean) => void
     ) => void;
 
-    onInDirChange: (callback: (event: Electron.IpcRendererEvent, changes: UpdatedFiles) => void) => void
+    onInDirChange: (
+        callback: (event: Electron.IpcRendererEvent, changes: UpdatedFiles) => void
+    ) => void;
 
-    unsubscribe: (event: 'drives-loaded' | 'directory' | 'in-dir-change') => void,
+    unsubscribe: (event: 'drives-loaded' | 'directory' | 'in-dir-change') => void;
 }
 
 declare global {

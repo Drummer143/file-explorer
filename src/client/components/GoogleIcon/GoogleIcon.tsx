@@ -16,7 +16,8 @@ type IconName =
     | 'close' // close
     | 'fullscreen' // fullscreen
     | 'fullscreen_exit' // fullscreen exit
-    | 'arrow_back'; // arrow back
+    | 'arrow_back' // arrow back
+    | 'arrow_forward'; // arrow forward
 
 type Props = {
     iconName: IconName;

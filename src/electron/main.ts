@@ -20,7 +20,7 @@ if (require('electron-squirrel-startup')) {
 
 // const PATH_TO_WINDOW_LOGS = isDev
 //     ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json'
-//     : __dirname + 'windowConfig.json'; 
+//     : __dirname + 'windowConfig.json';
 
 const createWindow = (): void => {
     // let windowConfig: Electron.BrowserWindowConstructorOptions;
@@ -121,17 +121,26 @@ const getFileInfo = (path: string, name: string) => {
     } catch (error) {
         console.error(error);
     }
-}
+};
 
-const watchForDirectory = (event: IpcMainEvent, pathToDir: string, error: Error, events: watcher.Event[]) => {
-    if (error) { console.error(error) }
-    if (!events || events.length === 0) { return }
+const watchForDirectory = (
+    event: IpcMainEvent,
+    pathToDir: string,
+    error: Error,
+    events: watcher.Event[]
+) => {
+    if (error) {
+        console.error(error);
+    }
+    if (!events || events.length === 0) {
+        return;
+    }
 
     const updatedFiles: UpdatedFiles = { create: [], delete: [], update: [] };
 
     events
         .filter(event => {
-            const parentDir = path.basename(path.join(event.path, '..'))
+            const parentDir = path.basename(path.join(event.path, '..'));
 
             return parentDir === path.basename(pathToDir);
         })
@@ -151,12 +160,14 @@ const watchForDirectory = (event: IpcMainEvent, pathToDir: string, error: Error,
     if (updatedFiles.create.length > 0 || updatedFiles.delete.length > 0) {
         event.sender.send('in-dir-change', updatedFiles);
     }
-}
+};
 
 // handlers
 
 const readDrives = (event: IpcMainEvent) => {
-    if (unsubscribe) { unsubscribe() }
+    if (unsubscribe) {
+        unsubscribe();
+    }
 
     exec('wmic logicaldisk get name', (error, stdout) => {
         if (error) {
@@ -170,28 +181,32 @@ const readDrives = (event: IpcMainEvent) => {
             event.sender.send('drives-loaded', info);
         }
     });
-}
+};
 
 const readDirectory = (event: IpcMainEvent, pathToDir: string) => {
-    if (unsubscribe) { unsubscribe() }
+    if (unsubscribe) {
+        unsubscribe();
+    }
 
     if (pathToDir) {
-        const files: CustomFile[] = fs.readdirSync(`${pathToDir}\\`, { encoding: 'utf-8' })
+        const files: CustomFile[] = fs
+            .readdirSync(`${pathToDir}\\`, { encoding: 'utf-8' })
             .map(file => getFileInfo(`${pathToDir}\\${file}`, file))
             .filter(file => file);
 
         event.sender.send('directory', files);
     }
 
-    const watch = (error: Error, events: watcher.Event[]) => watchForDirectory(event, pathToDir, error, events);
+    const watch = (error: Error, events: watcher.Event[]) =>
+        watchForDirectory(event, pathToDir, error, events);
 
     watcher.subscribe(`${pathToDir}\\`, watch);
 
     unsubscribe = () => {
-        watcher.unsubscribe(`${pathToDir}\\`, watch)
+        watcher.unsubscribe(`${pathToDir}\\`, watch);
         unsubscribe = null;
     };
-}
+};
 
 const openFile = (event: IpcMainEvent, pathToFile: string) => {
     exec(pathToFile, (error, stdout) => {
@@ -201,9 +216,10 @@ const openFile = (event: IpcMainEvent, pathToFile: string) => {
             console.info(stdout);
         }
     });
-}
+};
 
-const deleteFile = (event: IpcMainEvent, pathToFile: string) => fs.rmSync(pathToFile, { recursive: true })
+const deleteFile = (event: IpcMainEvent, pathToFile: string) =>
+    fs.rmSync(pathToFile, { recursive: true });
 
 ipcMain.on('get-drives', readDrives);
 ipcMain.on('read-directory', readDirectory);

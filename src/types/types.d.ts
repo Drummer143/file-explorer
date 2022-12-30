@@ -8,26 +8,26 @@ type CDrive = FileInfo & {
 
     isDirectory?: never;
     isFile?: never;
-}
+};
 
 type CFile = FileInfo & {
     isFile: boolean;
 
     isDirectory?: never;
     isDrive?: never;
-}
+};
 
 type CDirectory = FileInfo & {
     isDirectory: boolean;
 
     isFile?: never;
     isDrive?: never;
-}
+};
 
-type CustomFile = CDirectory | CFile | CDrive
+type CustomFile = CDirectory | CFile | CDrive;
 
 type UpdatedFiles = {
-    delete: string[]
-    update: CustomFile[]
-    create: CustomFile[]
-}
+    delete: string[];
+    update: CustomFile[];
+    create: CustomFile[];
+};

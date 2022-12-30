@@ -15,18 +15,24 @@ function FileButton({ file, onDoubleClick }: Props) {
     const [ctx, setCtx] = useState('');
 
     const getFileButtonFromPoint = (x: number, y: number): HTMLElement | undefined => {
-        return (document.elementsFromPoint(x, y) as HTMLElement[]).find(elem => elem?.dataset?.ctx === 'file' || elem?.dataset?.ctx === 'folder')
-    }
+        return (document.elementsFromPoint(x, y) as HTMLElement[]).find(
+            elem => elem?.dataset?.ctx === 'file' || elem?.dataset?.ctx === 'folder'
+        );
+    };
 
     const handleArrowKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-        const arrowKeyCodes = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown']
+        const arrowKeyCodes = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
 
         if (e.code === 'Enter') {
             onDoubleClick();
-        } else if (!arrowKeyCodes.includes(e.code)) { return };
+        } else if (!arrowKeyCodes.includes(e.code)) {
+            return;
+        }
 
         const rect = (e.target as HTMLElement).getBoundingClientRect();
-        const listGapInRem = +(getComputedStyle(document.documentElement).getPropertyValue('--file-list-gap').replace('rem', ''));
+        const listGapInRem = +getComputedStyle(document.documentElement)
+            .getPropertyValue('--file-list-gap')
+            .replace('rem', '');
         const oneGapInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
         const listGapShift = listGapInRem * oneGapInPixels;
 
@@ -34,16 +40,27 @@ function FileButton({ file, onDoubleClick }: Props) {
 
         switch (e.code) {
             case 'ArrowLeft':
-                elem = getFileButtonFromPoint(rect.left - listGapShift - 1, rect.top + rect.height / 2);
+                elem = getFileButtonFromPoint(
+                    rect.left - listGapShift - 1,
+                    rect.top + rect.height / 2
+                );
                 break;
             case 'ArrowRight':
-                elem = getFileButtonFromPoint(rect.right + listGapShift + 1, rect.top + rect.height / 2);
+                elem = getFileButtonFromPoint(
+                    rect.right + listGapShift + 1,
+                    rect.top + rect.height / 2
+                );
                 break;
             case 'ArrowUp': {
-                const x = rect.left + rect.width / 2, y = rect.top - listGapShift - 1
+                const x = rect.left + rect.width / 2,
+                    y = rect.top - listGapShift - 1;
                 elem = getFileButtonFromPoint(x, y);
 
-                for (let shiftFromMid = 0; shiftFromMid <= rect.width / 2 && !elem; shiftFromMid++) {
+                for (
+                    let shiftFromMid = 0;
+                    shiftFromMid <= rect.width / 2 && !elem;
+                    shiftFromMid++
+                ) {
                     elem = getFileButtonFromPoint(x + shiftFromMid, y);
                     if (!elem) {
                         elem = getFileButtonFromPoint(x - shiftFromMid, y);
@@ -52,10 +69,15 @@ function FileButton({ file, onDoubleClick }: Props) {
                 break;
             }
             case 'ArrowDown': {
-                const x = rect.left + rect.width / 2, y = rect.bottom + listGapShift + 1
+                const x = rect.left + rect.width / 2,
+                    y = rect.bottom + listGapShift + 1;
                 elem = getFileButtonFromPoint(x, y);
 
-                for (let shiftFromMid = 0; shiftFromMid <= rect.width / 2 && !elem; shiftFromMid++) {
+                for (
+                    let shiftFromMid = 0;
+                    shiftFromMid <= rect.width / 2 && !elem;
+                    shiftFromMid++
+                ) {
                     elem = getFileButtonFromPoint(x + shiftFromMid, y);
                     if (!elem) {
                         elem = getFileButtonFromPoint(x - shiftFromMid, y);
@@ -68,7 +90,7 @@ function FileButton({ file, onDoubleClick }: Props) {
         if (elem) {
             elem.focus();
         }
-    }
+    };
 
     useEffect(() => {
         if (isFile) {
@@ -91,13 +113,10 @@ function FileButton({ file, onDoubleClick }: Props) {
                 .concat(' hover:bg-[var(--bottom-grey-dark)]')
                 .concat(' active:bg-[var(--bg-dark)]')
                 .concat(' focus:outline focus:outline-gray-400')
-                .concat(' ', styles.wrapper)
-            }
+                .concat(' ', styles.wrapper)}
         >
             <GoogleIcon
-                className={`text-[50px]`
-                    .concat(isDirectory || isDrive ? ' text-yellow-300' : '')
-                }
+                className={`text-[50px]`.concat(isDirectory || isDrive ? ' text-yellow-300' : '')}
                 iconName={isFile ? 'draft' : 'folder'}
             />
             <div>

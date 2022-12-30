@@ -6,9 +6,10 @@ import GoBackButton from '../GoBackButton/GoBackButton';
 import useListenElectronEvents from '../../hooks/useListenElectronEvents';
 
 import styles from './FileExplorer.module.scss';
+import GoForwardButton from '../GoForwardButton/GoForwardButton';
 
 function FileExplorer() {
-    const { pushRoute, currentPath, history } = useHistoryStore(state => state);
+    const { pushRoute, currentPath } = useHistoryStore(state => state);
 
     const [files, setFiles] = useState<CustomFile[]>([]);
     const [isFilesLoading, setIsFilesLoading] = useState(true);
@@ -67,53 +68,63 @@ function FileExplorer() {
 
     useEffect(() => {
         if (canChangeNavBarSize) {
-            inputRef.current.style.width = `${spanRef.current.clientWidth + 20 + 100}px`;
+            inputRef.current.style.width = `${spanRef.current.clientWidth + 200}px`;
         }
     }, [input, canChangeNavBarSize]);
 
-    useEffect(() => console.log(history), [history.length]);
-
     return (
         <>
-            <span ref={spanRef} className={'absolute text-4xl px-0.5 top-[-1000px] left-[-1000px] invisible pointer-events-none'}>
+            <span
+                ref={spanRef}
+                className={
+                    'absolute text-4xl px-0.5 top-[-1000px] left-[-1000px] invisible pointer-events-none'
+                }
+            >
                 {input}
             </span>
             <div>
                 <nav
                     ref={inputRef}
                     onMouseLeave={() => setCanChangeNavBarSize(true)}
-                    className={'absolute top-16 left-1/2 -translate-x-[calc(50%_+_25px)] min-w-[400px] max-w-[80%]'
-                        .concat(' gap-5 transition-[opacity,_width] grid grid-cols-[58px,_1fr] place-items-center')
-                    }
+                    className={'absolute top-16 left-1/2 -translate-x-1/2 min-w-[400px] max-w-[80%]'.concat(
+                        ' gap-5 transition-[opacity,_width] grid grid-cols-[min-content,_1fr,_min-content] place-items-center'
+                    )}
                 >
                     <GoBackButton onClickAdditional={() => setCanChangeNavBarSize(false)} />
 
                     <input
-                        tabIndex={2}
                         value={input}
                         onChange={handlePathInputChange}
                         onKeyDown={handlePathInputEnterPress}
                         onFocus={() => setCanChangeNavBarSize(true)}
                         className={'text-[var(--secondary-text-dark)] w-full px-5 pt-1 pb-2 border-solid border border-transparent'
-                            .concat(' text-center rounded-2xl transition delay-50 duration-300 text-4xl leading-[3rem]')
+                            .concat(
+                                ' text-center rounded-2xl transition delay-50 duration-300 text-4xl leading-[3rem]'
+                            )
                             .concat(' hover:border-[var(--top-grey-dark)]')
                             .concat(' focus:text-[var(--primary-text-dark)]')
-                            .concat(' ', styles.pathInput)
-                        }
+                            .concat(' ', styles.pathInput)}
                     />
+
+                    <GoForwardButton onClickAdditional={() => setCanChangeNavBarSize(false)} />
                 </nav>
 
                 <div
-                    tabIndex={3}
                     data-ctx="explorer"
                     ref={fileContainerRef}
                     className={'max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 transition-[transform,_top,_left_,opacity] duration-500'
-                        .concat(' scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl')
-                        .concat(' ', (currentPath && files.length !== 0) ? 'top-40' : 'top-1/2 -translate-y-1/2')
+                        .concat(
+                            ' scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl'
+                        )
+                        .concat(
+                            ' ',
+                            currentPath && files.length !== 0
+                                ? 'top-40'
+                                : 'top-1/2 -translate-y-1/2'
+                        )
                         .concat(isFilesLoading ? ' opacity-0' : '')
                         .concat(files.length === 0 ? ' min-h-[100px]' : '')
-                        .concat(' ', styles.filesContainer)
-                    }
+                        .concat(' ', styles.filesContainer)}
                 >
                     {files.length ? (
                         files.map((file, i) => (

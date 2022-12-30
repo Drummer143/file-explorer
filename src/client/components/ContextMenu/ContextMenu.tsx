@@ -31,7 +31,8 @@ function ContextMenu() {
     const menuSections: MenuSections = {
         drive: [
             {
-                name: 'Open', onClick: (info) => {
+                name: 'Open',
+                onClick: info => {
                     const path = currentPath ? `${currentPath}/${info}` : info;
                     pushRoute(path);
                     window.electronAPI.readDirectory(path);
@@ -39,20 +40,30 @@ function ContextMenu() {
             }
         ],
         file: [
-            { name: 'Open', onClick: (info: string) => window.electronAPI.openFile(`${currentPath}/${info}`) },
-            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${currentPath}/${info}`) }
+            {
+                name: 'Open',
+                onClick: (info: string) => window.electronAPI.openFile(`${currentPath}/${info}`)
+            },
+            {
+                name: 'Delete',
+                onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
+            }
         ],
         folder: [
             {
-                name: 'Open', onClick: (info) => {
+                name: 'Open',
+                onClick: info => {
                     const path = currentPath ? `${currentPath}/${info}` : info;
                     pushRoute(path);
                     window.electronAPI.readDirectory(path);
                 }
             },
-            { name: 'Delete', onClick: (info) => window.electronAPI.deleteFile(`${currentPath}/${info}`) }
+            {
+                name: 'Delete',
+                onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
+            }
         ]
-    }
+    };
 
     const handleHideContextMenu = (e: MouseEvent) => {
         if (e.button !== 2 && !e.composedPath().includes(ctxRef.current)) {
@@ -66,7 +77,7 @@ function ContextMenu() {
         onClick();
 
         setContextMenuParams(defaultMenuParams);
-    }
+    };
 
     const handleOpenContextMenu = (e: MouseEvent) => {
         if (e.button === 2) {
@@ -143,8 +154,12 @@ function ContextMenu() {
         <div
             ref={ctxRef}
             className={'transition-opacity bg-[var(--menu-dark)] min-w-[150px] border border-[var(--top-grey-dark)] p-1 border-solid absolute z-[100]'
-                .concat(!contextMenuParams.shouldDisplay ? ' opacity-0 top-[200vh] left-[200vw] pointer-events-none hidden' : '')
-            }
+                .concat(
+                    !contextMenuParams.shouldDisplay
+                        ? ' opacity-0 top-[200vh] left-[200vw] pointer-events-none hidden'
+                        : ''
+                )
+                .concat(' ', styles.wrapper)}
             style={{ top: contextMenuParams.y, left: contextMenuParams.x }}
         >
             {contextMenuParams.shouldDisplay &&
@@ -159,12 +174,16 @@ function ContextMenu() {
                             </legend>
 
                             <div
-                                className={'flex flex-col items-start gap-2 pl-2'
-                                    .concat(' ', i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1')
-                                }
+                                className={'flex flex-col items-start gap-2 pl-2'.concat(
+                                    ' ',
+                                    i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1'
+                                )}
                             >
                                 {menuSections[section].map(({ onClick, name }) => (
-                                    <button key={name} onClick={() => handleClick(() => onClick(info))}>
+                                    <button
+                                        key={name}
+                                        onClick={() => handleClick(() => onClick(info))}
+                                    >
                                         {name}
                                     </button>
                                 ))}
