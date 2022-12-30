@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
-import { useHistoryStore } from '../../stores/explorerStores';
-import FileButton from '../FileButton/FileButton';
+import { useHistoryStore } from '../../../stores/explorerStores';
+import FileButton from '../../FileButton/FileButton';
 
 import styles from './FileList.module.scss';
 

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import PathInput from '../PathInput/PathInput';
-import useListenElectronEvents from '../../hooks/useListenElectronEvents';
+import useListenElectronEvents from '../../../hooks/useListenElectronEvents';
 
 import FileList from '../FileList/FileList';
 
-function FileExplorer() {
+function FileExplorerLayout() {
     const [files, setFiles] = useState<CustomFile[]>([]);
     const [isFilesLoading, setIsFilesLoading] = useState(true);
 
@@ -29,4 +29,4 @@ function FileExplorer() {
     );
 }
 
-export default FileExplorer;
+export default FileExplorerLayout;

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useHistoryStore } from "../../stores/explorerStores";
+import { useHistoryStore } from "../../../stores/explorerStores";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import GoForwardButton from "../GoForwardButton/GoForwardButton";
 
