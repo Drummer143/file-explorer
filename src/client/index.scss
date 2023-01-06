@@ -6,17 +6,17 @@
     --bg-dark: #121212;
     --menu-dark: #181818;
     --top-grey-dark: #404040;
-    --file-list-gap: 0.5rem;
     --bottom-grey-dark: #282828;
     --primary-text-dark: #fff;
     --secondary-text-dark: #b3b3b3;
-    --path-input-gradient-dark: repeating-linear-gradient(
-        180deg,
-        #121212 0%,
-        #404040 25%,
-        #404040 75%,
-        #121212 100%
-    );
+
+    --path-input-gradient-dark: repeating-linear-gradient(180deg,
+            #121212 0%,
+            #404040 25%,
+            #404040 75%,
+            #121212 100%);
+
+    --file-list-gap: 0.5rem;
 }
 
 * {

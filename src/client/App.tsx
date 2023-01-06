@@ -4,6 +4,7 @@ import TittleFrame from './components/TittleFrame/TittleFrame';
 import ContextMenu from './components/ContextMenu/ContextMenu';
 import FileExplorer from './components/FileExplorer/FileExplorerLayout/FileExplorerLayout';
 import FrameWindowControlButtons from './components/FrameWindowControlButtons/FrameWindowControlButtons';
+import Settings from './components/Settings/Settings';
 
 function App() {
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -18,6 +19,7 @@ function App() {
 
     return (
         <>
+            <Settings />
             <ContextMenu />
             <TittleFrame isFullScreen={isFullscreen} />
             <FrameWindowControlButtons

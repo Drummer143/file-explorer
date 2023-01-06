@@ -1,3 +1,5 @@
+import React from 'react';
+
 import './GoogleIcon.scss';
 
 type IconParams = {
@@ -17,28 +19,30 @@ type IconName =
     | 'fullscreen' // fullscreen
     | 'fullscreen_exit' // fullscreen exit
     | 'arrow_back' // arrow back
-    | 'arrow_forward'; // arrow forward
+    | 'arrow_forward' // arrow forward
+    | 'arrow_right' // arrow right
+    | 'arrow_left' // arrow left
 
 type Props = {
     iconName: IconName;
+
     size?: number;
-    iconParams?: IconParams;
     className?: string;
+
+    onClick?: (e: React.MouseEvent) => void
 };
 
 function GoogleIcon({
     iconName,
     className,
     size,
-    iconParams = { fill: 1, grade: 0, opticalSize: 48, weight: 400 }
 }: Props) {
     return (
         <span
             style={size ? { fontSize: size } : null}
-            className={`aspect-square grid place-items-center material-symbols-outlined${
-                className ? ` ${className}` : ''
-            }`}
-            // style={{ fontVariationSettings: `"FILL" ${iconParams.fill}, "wght" ${iconParams.weight}, "GRAD" ${iconParams.grade}, "opsz" ${iconParams.opticalSize}` }}
+            className={`aspect-square grid place-items-center material-symbols-outlined${className ? ` ${className}` : ''
+                }`}
+        // style={{ fontVariationSettings: `"FILL" ${iconParams.fill}, "wght" ${iconParams.weight}, "GRAD" ${iconParams.grade}, "opsz" ${iconParams.opticalSize}` }}
         >
             {iconName}
         </span>

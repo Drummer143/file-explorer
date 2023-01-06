@@ -14,6 +14,8 @@ i18n
         resources: {
             en: {
                 translation: {
+                    settings: 'Settings',
+                    language: 'Language',
                     title: 'File Explorer',
                     ctx: {
                         buttons: {
@@ -26,11 +28,19 @@ i18n
                             folder: 'folder',
                             file: 'file'
                         }
+                    },
+                    windowControlButtons: {
+                        minimize: 'Minimize',
+                        restoreToWindow: 'Restore to window',
+                        maximize: 'Maximize',
+                        close: 'Close'
                     }
                 }
             },
             ru: {
                 translation: {
+                    settings: 'Настройки',
+                    language: 'Язык',
                     title: 'Проводник',
                     ctx: {
                         buttons: {
@@ -43,6 +53,12 @@ i18n
                             folder: 'папка',
                             file: 'файл'
                         }
+                    },
+                    windowControlButtons: {
+                        minimize: 'Свернуть',
+                        restoreToWindow: 'Свернуть в окно',
+                        maximize: 'Развернуть',
+                        close: 'Закрыть'
                     }
                 }
             }
