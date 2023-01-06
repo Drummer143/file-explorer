@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './ContextMenu.module.scss';
 import { useHistoryStore } from '../../stores/explorerStores';
 import { useCMCStore } from '../../stores/CMCStore';
+import LocalizedText from '../LocalizedText/LocalizedText';
 
 type ContextMenuProps = {
     shouldDisplay: boolean;
@@ -13,7 +14,7 @@ type ContextMenuProps = {
 const defaultMenuParams = { shouldDisplay: false, y: '200vh', x: '200vw' };
 
 type SectionProps = {
-    name: string;
+    name: React.ReactNode;
     onClick: (info?: string) => void;
 };
 
@@ -33,7 +34,7 @@ function ContextMenu() {
     const menuSections: MenuSections = {
         drive: [
             {
-                name: 'Open',
+                name: <LocalizedText i18key='ctx.buttons.open' />,
                 onClick: info => {
                     const path = currentPath ? `${currentPath}/${info}` : info;
                     pushRoute(path);
@@ -43,15 +44,15 @@ function ContextMenu() {
         ],
         file: [
             {
-                name: 'Open',
+                name: <LocalizedText i18key='ctx.buttons.open' />,
                 onClick: info => window.electronAPI.openFile(`${currentPath}/${info}`)
             },
             {
-                name: 'Delete',
+                name: <LocalizedText i18key='ctx.buttons.delete' />,
                 onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
             },
             {
-                name: 'Rename',
+                name: <LocalizedText i18key='ctx.buttons.rename' />,
                 onClick: (info) => {
                     console.log(`${currentPath}/${info}`);
                     setCurrentEditingFile(info);
@@ -60,7 +61,7 @@ function ContextMenu() {
         ],
         folder: [
             {
-                name: 'Open',
+                name: <LocalizedText i18key='ctx.buttons.open' />,
                 onClick: info => {
                     const path = currentPath ? `${currentPath}/${info}` : info;
                     pushRoute(path);
@@ -68,11 +69,11 @@ function ContextMenu() {
                 }
             },
             {
-                name: 'Delete',
+                name: <LocalizedText i18key='ctx.buttons.delete' />,
                 onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
             },
             {
-                name: 'Rename',
+                name: <LocalizedText i18key='ctx.buttons.rename' />,
                 onClick: (info) => {
                     console.log(`${currentPath}/${info}`);
                     setCurrentEditingFile(info);
@@ -186,7 +187,7 @@ function ContextMenu() {
                             key={section}
                         >
                             <legend className={`text-xs relative ${styles.heading}`}>
-                                {section}
+                                <LocalizedText i18key={`ctx.sections.${section}`} />
                             </legend>
 
                             <div
@@ -195,9 +196,9 @@ function ContextMenu() {
                                     i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1'
                                 )}
                             >
-                                {menuSections[section].map(({ onClick, name }) => (
+                                {menuSections[section].map(({ onClick, name }, i) => (
                                     <button
-                                        key={name}
+                                        key={i}
                                         onClick={() => handleClick(() => onClick(info))}
                                     >
                                         {name}

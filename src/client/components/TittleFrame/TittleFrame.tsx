@@ -1,3 +1,5 @@
+import LocalizedText from '../LocalizedText/LocalizedText';
+
 import styles from './TittleFrame.module.scss';
 
 type Props = {
@@ -7,13 +9,13 @@ type Props = {
 function TittleFrame({ isFullScreen }: Props) {
     return (
         <div
-            className={`absolute ${
-                isFullScreen ? '-top-11' : 'top-0'
-            } transition-[top] left-1/2 -translate-x-1/2 text-xl bg-[var(--menu-dark)] w-48 h-11 rounded-b-lg grid place-items-center ${
-                styles.wrapper
-            }`}
+            className={'absolute transition-[top] left-1/2 -translate-x-1/2 text-xl grid'
+                .concat(' bg-[var(--menu-dark)] w-48 h-11 rounded-b-lg place-items-center')
+                .concat(' ', isFullScreen ? '-top-11' : 'top-0')
+                .concat(' ', styles.wrapper)
+            }
         >
-            {document.title}
+            <LocalizedText i18key='title' />
         </div>
     );
 }
