@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-
+import { useEffect, useState, useRef } from 'react';
 import i18n from './../../i18n';
+
 import GoogleIcon from '../GoogleIcon/GoogleIcon';
 import LocalizedText from '../LocalizedText/LocalizedText';
-import { useRef } from 'react';
 
 function Settings() {
+    const [languages] = useState(i18n.languages.concat().sort());
     const [opened, setOpened] = useState(false);
-    const [languages] = useState(i18n.languages.concat().sort())
     const [activeSection, setActiveSection] = useState('');
     const [languageNames, setLanguageNames] = useState<Intl.DisplayNames>(new Intl.DisplayNames(i18n.language, { type: 'language' }));
 
@@ -22,27 +21,20 @@ function Settings() {
         );
     }
 
-    const toggleOpened = () => {
-        if (opened) {
-            setActiveSection('');
-            document.removeEventListener('click', handleScreenClick);
+    const toggleSection = (section: string) =>
+        setActiveSection(prev => prev ? '' : section);
+
+    const handleOuterSettingsClick = (e: MouseEvent) => {
+        if (!e.composedPath().includes(settingsRef.current)) {
+            toggleSettings();
+            document.removeEventListener('click', handleOuterSettingsClick);
         }
-        setOpened(prev => !prev);
     }
+
+    const toggleSettings = () => setOpened(prev => !prev);
 
     const handleEscapeKeyDown = (e: KeyboardEvent) => {
-        if (e.code === 'Escape') { toggleOpened() }
-    }
-
-    const toggleSection = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setActiveSection(prev => prev !== 'language' ? 'language' : '')
-    }
-
-    const handleScreenClick = (e: MouseEvent) => {
-        if (!e.composedPath().includes(settingsRef.current)) {
-            toggleOpened();
-            document.removeEventListener('click', handleScreenClick);
-        }
+        if (e.code === 'Escape') { toggleSettings(); }
     }
 
     useEffect(() => {
@@ -55,21 +47,25 @@ function Settings() {
 
     useEffect(() => {
         if (opened) {
-            document.addEventListener('click', handleScreenClick);
+            document.addEventListener('click', handleOuterSettingsClick);
+
+            return () => {
+                document.removeEventListener('click', handleOuterSettingsClick);
+            }
         }
     }, [opened])
 
     return (
-        <div ref={settingsRef} className={'absolute z-[1] bottom-0 right-0 transition-transform'
+        <div ref={settingsRef} className={'absolute z-[100] bottom-0 right-0 transition-transform'
             .concat(opened ? '' : ' translate-x-full')}
         >
             <button
-                className={'absolute z-[1] bg-[var(--bg-dark)] top-0 left-0 -translate-x-full transition-transform rounded-2xl outline outline-1'
+                className={'absolute z-[100] bg-[var(--bg-dark)] top-0 left-0 -translate-x-full transition-transform rounded-2xl outline outline-1'
                     .concat(' transition-[opacity,_outline-color,_background-color] outline-transparent -outline-offset-1 scale-[80%] -translate-y-[10%]')
                     .concat(' focus:outline-white')
                     .concat(' hover:bg-gray-700')
                     .concat(' active:bg-gray-500')}
-                onClick={toggleOpened}
+                onClick={toggleSettings}
             >
                 <GoogleIcon
                     className={opened ? 'rotate-180' : ''}
@@ -88,7 +84,7 @@ function Settings() {
                             .concat(' ', activeSection === 'language' ? 'bg-gray-800' : 'bg-[var(--top-grey-dark)]')
                             .concat(' hover:bg-gray-700')
                             .concat(' active:bg-gray-800')}
-                        onClick={toggleSection}
+                        onClick={() => toggleSection('language')}
                     >
                         <LocalizedText i18key='language' />
                     </button>
@@ -108,7 +104,7 @@ function Settings() {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 

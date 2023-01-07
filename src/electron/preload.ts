@@ -22,6 +22,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     deleteFile: (path: string) => ipcRenderer.send('delete-file', path),
     renameFile: (oldPath: string, newPath: string) => ipcRenderer.send('rename-file', oldPath, newPath),
 
+    createFolder: (path: string) => ipcRenderer.send('create-folder', path),
+    createFile: (path: string) => ipcRenderer.send('create-file', path),
+
     minimize: () => ipcRenderer.send('minimize'),
     restoreToWindow: () => ipcRenderer.send('restore-to-window'),
     maximize: () => ipcRenderer.send('maximize'),

@@ -31,3 +31,8 @@ type UpdatedFiles = {
     update: CustomFile[];
     create: CustomFile[];
 };
+
+type FileCreatingModalParams = {
+    type: 'file' | 'folder'
+    path: string
+}

@@ -18,6 +18,9 @@ interface IElectronAPI {
     deleteFile: (path: string) => void;
     renameFile: (oldPath: string, newPath: string) => void
 
+    createFolder: (path: string) => void
+    createFile: (path: string) => void
+
     minimize: () => void;
     restoreToWindow: () => void;
     maximize: () => void;

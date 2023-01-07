@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useCMCStore } from '../../stores/CMCStore';
+import { useHistoryStore } from '../../stores/explorerStores';
+import LocalizedText from '../LocalizedText/LocalizedText';
 
 import styles from './ContextMenu.module.scss';
-import { useHistoryStore } from '../../stores/explorerStores';
-import { useCMCStore } from '../../stores/CMCStore';
-import LocalizedText from '../LocalizedText/LocalizedText';
 
 type ContextMenuProps = {
     shouldDisplay: boolean;
@@ -14,7 +16,7 @@ type ContextMenuProps = {
 const defaultMenuParams = { shouldDisplay: false, y: '200vh', x: '200vw' };
 
 type SectionProps = {
-    name: React.ReactNode;
+    name: string;
     onClick: (info?: string) => void;
 };
 
@@ -23,8 +25,9 @@ type MenuSections = {
 };
 
 function ContextMenu() {
-    const { setCurrentEditingFile } = useCMCStore(state => state);
+    const { setCurrentEditingFile, setModal } = useCMCStore(state => state);
     const { pushRoute, currentPath } = useHistoryStore(state => state);
+    const { t } = useTranslation();
 
     const [currentMenuSections] = useState<{ section: string; info: string }[]>([]);
     const [contextMenuParams, setContextMenuParams] = useState<ContextMenuProps>(defaultMenuParams);
@@ -34,7 +37,7 @@ function ContextMenu() {
     const menuSections: MenuSections = {
         drive: [
             {
-                name: <LocalizedText i18key='ctx.buttons.open' />,
+                name: t('ctx.buttons.open'),
                 onClick: info => {
                     const path = currentPath ? `${currentPath}/${info}` : info;
                     pushRoute(path);
@@ -44,24 +47,23 @@ function ContextMenu() {
         ],
         file: [
             {
-                name: <LocalizedText i18key='ctx.buttons.open' />,
+                name: t('ctx.buttons.open'),
                 onClick: info => window.electronAPI.openFile(`${currentPath}/${info}`)
             },
             {
-                name: <LocalizedText i18key='ctx.buttons.delete' />,
+                name: t('ctx.buttons.delete'),
                 onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
             },
             {
-                name: <LocalizedText i18key='ctx.buttons.rename' />,
+                name: t('ctx.buttons.rename'),
                 onClick: (info) => {
-                    console.log(`${currentPath}/${info}`);
                     setCurrentEditingFile(info);
                 }
             }
         ],
         folder: [
             {
-                name: <LocalizedText i18key='ctx.buttons.open' />,
+                name: t('ctx.buttons.open'),
                 onClick: info => {
                     const path = currentPath ? `${currentPath}/${info}` : info;
                     pushRoute(path);
@@ -69,14 +71,39 @@ function ContextMenu() {
                 }
             },
             {
-                name: <LocalizedText i18key='ctx.buttons.delete' />,
+                name: t('ctx.buttons.delete'),
                 onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
             },
             {
-                name: <LocalizedText i18key='ctx.buttons.rename' />,
+                name: t('ctx.buttons.rename'),
                 onClick: (info) => {
-                    console.log(`${currentPath}/${info}`);
                     setCurrentEditingFile(info);
+                }
+            }
+        ],
+        explorer: [
+            {
+                name: t('ctx.buttons.createFolder'),
+                onClick: () => {
+                    setModal({
+                        name: 'fileCreating',
+                        data: {
+                            path: currentPath,
+                            type: 'folder'
+                        }
+                    })
+                }
+            },
+            {
+                name: t('ctx.buttons.createFile'),
+                onClick: () => {
+                    setModal({
+                        name: 'fileCreating',
+                        data: {
+                            path: currentPath,
+                            type: 'file'
+                        }
+                    })
                 }
             }
         ]
@@ -99,11 +126,9 @@ function ContextMenu() {
     const handleOpenContextMenu = (e: MouseEvent) => {
         if (e.button === 2) {
             currentMenuSections.length = 0;
-            const path = e.composedPath();
+            const path = e.composedPath() as HTMLElement[];
             path.forEach(node => {
-                if (
-                    (node as HTMLElement)?.dataset?.ctx &&
-                    menuSections[(node as HTMLElement)?.dataset?.ctx]
+                if (node?.dataset?.ctx && menuSections[node?.dataset?.ctx]
                 ) {
                     currentMenuSections.push({
                         section: (node as HTMLElement).dataset.ctx,

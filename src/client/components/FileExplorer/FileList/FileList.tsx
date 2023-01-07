@@ -4,7 +4,6 @@ import { useHistoryStore } from '../../../stores/explorerStores';
 import FileButton from '../FileButton/FileButton';
 
 import styles from './FileList.module.scss';
-import { useState } from 'react';
 
 type Props = {
     isFilesLoading: boolean
@@ -15,8 +14,6 @@ type Props = {
 
 function FileList({ files, isFilesLoading, setIsFilesLoading }: Props) {
     const { pushRoute, currentPath } = useHistoryStore(state => state);
-
-    const [currentRenamingFile, setCurrentRenamingFile] = useState<string | null>(null)
 
     const fileContainerRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +39,7 @@ function FileList({ files, isFilesLoading, setIsFilesLoading }: Props) {
 
     return (
         <div
-            data-ctx="explorer"
+            data-ctx={currentPath ? 'explorer' : null}
             ref={fileContainerRef}
             className={'max-xl:w-3/4 absolute overflow-y-auto max-h-[calc(100vh_-_14rem)] left-1/2 transition-[transform,_top,_left_,opacity] duration-500'
                 .concat(' scroll-smooth -translate-x-1/2 flex w-7/12 justify-center flex-wrap gap-2 text-xl')

@@ -6,7 +6,7 @@ i18n
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        debug: true,
+        debug: false,
         fallbackLng: ['en', 'ru'],
         interpolation: {
             escapeValue: false
@@ -14,6 +14,11 @@ i18n
         resources: {
             en: {
                 translation: {
+                    enterFileName: 'Enter file name',
+                    enterFolderName: 'Enter folder name',
+                    create: 'Create',
+                    newFolder: 'New folder',
+                    newFile: 'New file',
                     settings: 'Settings',
                     language: 'Language',
                     title: 'File Explorer',
@@ -21,12 +26,15 @@ i18n
                         buttons: {
                             open: 'Open',
                             delete: 'Delete',
-                            rename: 'Rename'
+                            rename: 'Rename',
+                            createFolder: 'Create folder',
+                            createFile: 'Create file',
                         },
                         sections: {
                             drive: 'drive',
                             folder: 'folder',
-                            file: 'file'
+                            file: 'file',
+                            explorer: 'explorer'
                         }
                     },
                     windowControlButtons: {
@@ -39,6 +47,11 @@ i18n
             },
             ru: {
                 translation: {
+                    enterFileName: 'Введите имя файла',
+                    enterFolderName: 'Введите имя папки',
+                    create: 'Создать',
+                    newFolder: 'Новая папка',
+                    newFile: 'Новый файл',
                     settings: 'Настройки',
                     language: 'Язык',
                     title: 'Проводник',
@@ -46,12 +59,15 @@ i18n
                         buttons: {
                             open: 'Открыть',
                             delete: 'Удалить',
-                            rename: 'Переименовать'
+                            rename: 'Переименовать',
+                            createFolder: 'Создать папку',
+                            createFile: 'Создать файл',
                         },
                         sections: {
                             drive: 'диск',
                             folder: 'папка',
-                            file: 'файл'
+                            file: 'файл',
+                            explorer: 'проводник'
                         }
                     },
                     windowControlButtons: {
