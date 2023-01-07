@@ -23,6 +23,13 @@ function Settings() {
 
     const toggleSection = (section: string) =>
         setActiveSection(prev => prev ? '' : section);
+    const toggleSettings = () => {
+        if (opened) {
+            setActiveSection('');
+        }
+
+        setOpened(prev => !prev)
+    };
 
     const handleOuterSettingsClick = (e: MouseEvent) => {
         if (!e.composedPath().includes(settingsRef.current)) {
@@ -30,8 +37,6 @@ function Settings() {
             document.removeEventListener('click', handleOuterSettingsClick);
         }
     }
-
-    const toggleSettings = () => setOpened(prev => !prev);
 
     const handleEscapeKeyDown = (e: KeyboardEvent) => {
         if (e.code === 'Escape') { toggleSettings(); }

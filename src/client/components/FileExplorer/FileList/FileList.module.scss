@@ -1,7 +1,12 @@
 .filesContainer::-webkit-scrollbar {
-    opacity: 0;
+    width: 0.4rem;
 }
 
-.filesContainer::-webkit-scrollbar:hover {
-    opacity: 1;
+.filesContainer::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.filesContainer::-webkit-scrollbar-thumb {
+    background-color: var(--top-grey-dark);
+    border-radius: 20px;
 }

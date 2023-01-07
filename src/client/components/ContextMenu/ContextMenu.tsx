@@ -195,12 +195,8 @@ function ContextMenu() {
     return (
         <div
             ref={ctxRef}
-            className={'transition-opacity bg-[var(--menu-dark)] min-w-[150px] border border-[var(--top-grey-dark)] p-1 border-solid absolute z-[100]'
-                .concat(
-                    !contextMenuParams.shouldDisplay
-                        ? ' opacity-0 top-[200vh] left-[200vw] pointer-events-none hidden'
-                        : ''
-                )
+            className={'transition-opacity bg-[var(--menu-dark)] min-w-[150px] border border-[var(--top-grey-dark)] p-1 border-solid absolute z-[100] rounded-md'
+                .concat(!contextMenuParams.shouldDisplay ? ' opacity-0 top-[200vh] left-[200vw] pointer-events-none hidden' : '')
                 .concat(' ', styles.wrapper)}
             style={{ top: contextMenuParams.y, left: contextMenuParams.x }}
         >
@@ -216,18 +212,19 @@ function ContextMenu() {
                             </legend>
 
                             <div
-                                className={'flex flex-col items-start gap-2 pl-2'.concat(
-                                    ' ',
-                                    i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1'
-                                )}
+                                className={'flex flex-col items-start gap-0.5 transition-[background-color]'
+                                    .concat(' ', i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1')}
                             >
                                 {menuSections[section].map(({ onClick, name }, i) => (
-                                    <button
+                                    <div
+                                        className={'pl-2 w-full py-1 text-start transition-[background-color] cursor-pointer rounded'
+                                            .concat(' hover:bg-[var(--top-grey-dark)]')
+                                            .concat(' active:bg-[var(--bottom-grey-dark)]')}
                                         key={i}
                                         onClick={() => handleClick(() => onClick(info))}
                                     >
                                         {name}
-                                    </button>
+                                    </div>
                                 ))}
                             </div>
                         </fieldset>
