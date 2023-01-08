@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import xbytes from 'xbytes';
 
 import { useCMCStore } from '../../../stores/CMCStore';
 import { useHistoryStore } from '../../../stores/explorerStores';
@@ -60,10 +61,14 @@ function FileButton({ file, onDoubleClick }: Props) {
                 .concat(' focus:outline focus:outline-gray-400')
                 .concat(' ', styles.wrapper)}
         >
-            <GoogleIcon
-                className={`text-[50px]`.concat(isDirectory || isDrive ? ' text-yellow-300' : '')}
-                iconName={isFile ? 'draft' : 'folder'}
-            />
+            {file.isFile && file.type === 'image' ?
+                <img width={50} height={50} src={`${currentPath}/${file.fileName}`} alt={file.fileName} />
+                :
+                <GoogleIcon
+                    className={`text-[50px]`.concat(isDirectory || isDrive ? ' text-yellow-300' : '')}
+                    iconName={isFile ? 'draft' : 'folder'}
+                />
+            }
 
             <div>
                 {currentEditingFile !== name ?
@@ -80,7 +85,7 @@ function FileButton({ file, onDoubleClick }: Props) {
                     />
                 }
                 {isFile && (
-                    <p className={`text-[var(--secondary-text-dark)] text-[0.8rem]`}>size: {size}</p>
+                    <p className={`text-[var(--secondary-text-dark)] text-[0.8rem]`}>{xbytes(size)}</p>
                 )}
             </div>
         </button>

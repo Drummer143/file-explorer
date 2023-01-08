@@ -12,6 +12,7 @@ type CDrive = FileInfo & {
 
 type CFile = FileInfo & {
     isFile: boolean;
+    type: string;
 
     isDirectory?: never;
     isDrive?: never;

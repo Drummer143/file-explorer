@@ -55,12 +55,14 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "electron-squirrel-startup": "^1.0.0",
+    "file-type": "^18.0.0",
     "i18next": "^22.4.8",
     "i18next-browser-languagedetector": "^7.0.1",
     "postcss-preset-env": "^7.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.1.1",
+    "xbytes": "^1.8.0",
     "zustand": "^4.1.4"
   }
 }

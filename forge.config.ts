@@ -20,7 +20,7 @@ const config: ForgeConfig = {
     plugins: [
         new WebpackPlugin({
             mainConfig,
-            devContentSecurityPolicy: "default-src 'unsafe-inline'; connect-src 'self'; script-src 'self' 'unsafe-eval'; font-src 'self' fonts.gstatic.com; style-src 'self' fonts.googleapis.com 'unsafe-inline'; style-src-elem 'self' fonts.googleapis.com 'unsafe-inline'",
+            devContentSecurityPolicy: "default-src 'unsafe-inline'; img-src file://*; connect-src 'self'; script-src 'self' 'unsafe-eval'; font-src 'self' fonts.gstatic.com; style-src 'self' fonts.googleapis.com 'unsafe-inline'; style-src-elem 'self' fonts.googleapis.com 'unsafe-inline'",
 
             renderer: {
                 config: rendererConfig,
