@@ -225,7 +225,7 @@ const readDirectory = async (event: IpcMainEvent, pathToDir: string) => {
                 return res.filter(file => file)
             })
 
-        event.sender.send('directory', filesWithInfo);
+        event.sender.send('directory', filesWithInfo, pathToDir);
     }
 
     const watch = (error: Error, events: watcher.Event[]) =>

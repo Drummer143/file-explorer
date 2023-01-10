@@ -8,7 +8,7 @@ interface IElectronAPI {
 
     readDirectory: (path: string) => void;
     onReadDirectory: (
-        callback: (event: Electron.IpcRendererEvent, files: CustomFile[]) => void
+        callback: (event: Electron.IpcRendererEvent, files: CustomFile[], pathToParentDir: string) => void
     ) => void;
 
     // onNewFile: (callback: (event: Electron.IpcRendererEvent, file: CustomFile) => void) => void;

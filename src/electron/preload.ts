@@ -13,8 +13,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     readDirectory: (path: string) => ipcRenderer.send('read-directory', path),
     onReadDirectory: (callback: Function) => {
-        ipcRenderer.on('directory', (event: Electron.IpcRendererEvent, files: any) =>
-            callback(event, files)
+        ipcRenderer.on('directory', (event: Electron.IpcRendererEvent, files: any, pathToParentDir: string) =>
+            callback(event, files, pathToParentDir)
         );
     },
 
