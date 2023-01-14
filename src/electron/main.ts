@@ -25,6 +25,8 @@ if (require('electron-squirrel-startup')) {
 //     ? 'C:\\Users\\berge\\source\\repos\\file-explorer\\logs\\windowConfig.json'
 //     : __dirname + 'windowConfig.json';
 
+let mainWindow: BrowserWindow;
+
 const createWindow = (): void => {
     // let windowConfig: Electron.BrowserWindowConstructorOptions;
 
@@ -35,7 +37,7 @@ const createWindow = (): void => {
     // }
 
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         frame: false,
         fullscreen: true,
         height: 600,
@@ -113,22 +115,23 @@ app.on('activate', () => {
 // let watcher: fs.FSWatcher;
 let unsubscribe: () => void;
 
-const getFileType = async (pathToFile: string): Promise<FileTypeResult | undefined> => {
+const getFileType = async (event: IpcMainEvent, pathToFile: string): Promise<FileTypeResult | undefined> => {
     try {
         return await fileTypeFromFile(pathToFile);
     } catch (error) {
-        console.error(error);
+        sendError(event.sender, 'onGetInfo', 'warning', pathToFile);
+        // console.error(error);
 
         return;
     }
 }
 
-const getFileInfo = async (pathToFile: string, name: string): Promise<CustomFile> => {
+const getFileInfo = async (event: IpcMainEvent, pathToFile: string, name: string): Promise<CustomFile> => {
     try {
         const stats = fs.statSync(pathToFile);
 
         if (stats.isFile()) {
-            let fileType = await getFileType(pathToFile);
+            let fileType = await getFileType(event, pathToFile);
 
             return {
                 isFile: true,
@@ -144,7 +147,8 @@ const getFileInfo = async (pathToFile: string, name: string): Promise<CustomFile
             size: stats.size
         };
     } catch (error) {
-        console.error(error);
+        sendError(event.sender, 'onGetInfo', 'warning', pathToFile);
+        // console.error(error);
     }
 };
 
@@ -155,8 +159,10 @@ const watchForDirectory = async (
     events: watcher.Event[]
 ) => {
     if (error) {
-        console.error(error);
+        sendError(event.sender, 'onGetInfo', 'warning', pathToDir);
+        // console.error(error);
     }
+
     if (!events || events.length === 0) {
         return;
     }
@@ -169,13 +175,13 @@ const watchForDirectory = async (
 
             return parentDir === path.basename(pathToDir);
         })
-        .forEach(async (event) => {
-            switch (event.type) {
+        .forEach(async (e) => {
+            switch (e.type) {
                 case 'delete':
-                    updatedFiles.delete.push(path.basename(event.path));
+                    updatedFiles.delete.push(path.basename(e.path));
                     break;
                 case 'create':
-                    updatedFiles.create.push(await getFileInfo(event.path, path.basename(event.path)));
+                    updatedFiles.create.push(await getFileInfo(event, e.path, path.basename(e.path)));
                 // TODO: CASE FOR UPDATE EVENT
             }
         });
@@ -196,7 +202,7 @@ const readDrives = (event: IpcMainEvent) => {
 
     exec('wmic logicaldisk get name', (error, stdout) => {
         if (error) {
-            console.error(error);
+            console.error(error); // TODO: ADD ERROR SENDER
         } else {
             const info = stdout
                 .split('\r\r\n')
@@ -218,7 +224,7 @@ const readDirectory = async (event: IpcMainEvent, pathToDir: string) => {
 
         const filesWithInfo = await Promise.all(
             files.map(async (file) =>
-                await getFileInfo(`${pathToDir}\\${file}`, file)
+                await getFileInfo(event, `${pathToDir}\\${file}`, file)
             )
         )
             .then(res => {
@@ -244,7 +250,8 @@ const openFile = (event: IpcMainEvent, pathToFile: string) => {
 
     exec(`${pathToFile}`, (error, stdout) => {
         if (error) {
-            console.error(error);
+            sendError(event.sender, 'onOpenFile', 'error', pathToFile);
+            // console.error(error);
         } else {
             console.info(stdout);
         }
@@ -265,6 +272,10 @@ const createFolder = (event: IpcMainEvent, pathToFolder: string) => {
 
 const createFile = (event: IpcMainEvent, pathToFile: string) => {
     fs.openSync(pathToFile, 'w');
+}
+
+const sendError = (sender: Electron.WebContents, error: ElectronErrorKind, type: ErrorType, ...rest: any[]) => {
+    sender.send('error', error, type, rest)
 }
 
 ipcMain.on('get-drives', readDrives);

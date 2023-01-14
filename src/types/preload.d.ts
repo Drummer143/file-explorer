@@ -36,6 +36,10 @@ interface IElectronAPI {
     ) => void;
 
     unsubscribe: (event: 'drives-loaded' | 'directory' | 'in-dir-change') => void;
+
+    onError: (
+        callback: (event: Electron.IpcRendererEvent, error: ElectronErrorKind, type: ErrorType, ...rest: any[]) => void
+    ) => void;
 }
 
 declare global {

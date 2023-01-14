@@ -22,6 +22,11 @@ i18n
                     settings: 'Settings',
                     language: 'Language',
                     title: 'File Explorer',
+                    explorerErrors: {
+                        invalidPath: "Can't find {}. Check correctness of the path",
+                        onOpenFile: "Can't open file",
+                        onGetInfo: "Can't get information about file",
+                    },
                     ctx: {
                         buttons: {
                             open: 'Open',
@@ -55,6 +60,11 @@ i18n
                     settings: 'Настройки',
                     language: 'Язык',
                     title: 'Проводник',
+                    explorerErrors: {
+                        invalidPath: "Не удаётся найти {}. Проверьте правильность указанного пути",
+                        onOpenFile: 'Не удалось открыть файл',
+                        onGetInfo: 'Не удалось получить информацию о файле',
+                    },
                     ctx: {
                         buttons: {
                             open: 'Открыть',
