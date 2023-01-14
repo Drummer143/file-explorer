@@ -278,6 +278,22 @@ const sendError = (sender: Electron.WebContents, error: ElectronErrorKind, type:
     sender.send('error', error, type, rest)
 }
 
+const openInExplorer = (event: IpcMainEvent, pathToDir: string) => {
+    exec(`explorer "${pathToDir}"`, (error, stdout, stderr) => {
+        if (error) {
+            console.error(error);
+        }
+
+        if(stderr) {
+            console.error(stderr);
+        }
+
+        if(stdout) {
+            console.log(stdout);
+        }
+})
+}
+
 ipcMain.on('get-drives', readDrives);
 ipcMain.on('read-directory', readDirectory);
 ipcMain.on('open-file', openFile);
@@ -285,3 +301,4 @@ ipcMain.on('delete-file', deleteFile);
 ipcMain.on('rename-file', renameFile)
 ipcMain.on('create-folder', createFolder);
 ipcMain.on('create-file', createFile);
+ipcMain.on('open-in-explorer', openInExplorer);

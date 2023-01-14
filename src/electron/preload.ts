@@ -49,5 +49,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
         ipcRenderer.removeAllListeners(event),
 
     onError: (callback: Function) => ipcRenderer.on('error', (event: Electron.IpcRendererEvent, error: ElectronErrorKind, type: ErrorType, ...rest: any[]) =>
-        callback(event, error, type, ...rest))
+        callback(event, error, type, ...rest)),
+
+    openInExplorer: (path: string) => ipcRenderer.send('open-in-explorer', path)
 });

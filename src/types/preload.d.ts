@@ -40,6 +40,8 @@ interface IElectronAPI {
     onError: (
         callback: (event: Electron.IpcRendererEvent, error: ElectronErrorKind, type: ErrorType, ...rest: any[]) => void
     ) => void;
+
+    openInExplorer: (path: string) => void
 }
 
 declare global {

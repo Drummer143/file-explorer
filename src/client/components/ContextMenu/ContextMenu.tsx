@@ -39,11 +39,15 @@ function ContextMenu() {
             {
                 name: t('ctx.buttons.open'),
                 onClick: info => {
-                    const path = currentPath ? `${currentPath}/${info}` : info;
-                    pushRoute(path);
-                    window.electronAPI.readDirectory(path);
+                    pushRoute(info);
+                    window.electronAPI.readDirectory(info);
                 }
+            },
+            {
+                name: t('ctx.buttons.openInExplorer'),
+                onClick: info => window.electronAPI.openInExplorer(info)
             }
+
         ],
         file: [
             {
@@ -65,7 +69,7 @@ function ContextMenu() {
             {
                 name: t('ctx.buttons.open'),
                 onClick: info => {
-                    const path = currentPath ? `${currentPath}/${info}` : info;
+                    const path = `${currentPath}/${info}`;
                     pushRoute(path);
                     window.electronAPI.readDirectory(path);
                 }
@@ -78,6 +82,12 @@ function ContextMenu() {
                 name: t('ctx.buttons.rename'),
                 onClick: (info) => {
                     setCurrentEditingFile(info);
+                }
+            },
+            {
+                name: t('ctx.buttons.openInExplorer'),
+                onClick: info => {
+                    window.electronAPI.openInExplorer(`${currentPath}\\${info}`);
                 }
             }
         ],
@@ -105,6 +115,10 @@ function ContextMenu() {
                         }
                     })
                 }
+            },
+            {
+                name: t('ctx.buttons.openInExplorer'),
+                onClick: () => window.electronAPI.openInExplorer(currentPath)
             }
         ]
     };
