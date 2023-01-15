@@ -62,7 +62,14 @@ function FileButton({ file, onDoubleClick }: Props) {
                 .concat(' ', styles.wrapper)}
         >
             {file.isFile && file.type === 'image' ?
-                <img width={50} height={50} src={`${currentPath}/${file.fileName}`} alt={file.fileName} />
+                <img
+                    width={50}
+                    height={50}
+                    src={`${currentPath}/${file.fileName}`}
+                    alt={file.fileName}
+                    className={'max-w-[50px] max-h-[50px]'}
+
+                />
                 :
                 <GoogleIcon
                     className={`text-[50px]`.concat(isDirectory || isDrive ? ' text-yellow-300' : '')}
