@@ -163,28 +163,30 @@ const watchForDirectory = async (
         // console.error(error);
     }
 
-    if (!events || events.length === 0) {
-        return;
-    }
-
-    const updatedFiles: UpdatedFiles = { create: [], delete: [], update: [] };
-
-    events
+    const nonRecursiveEvents = events
         .filter(event => {
             const parentDir = path.basename(path.join(event.path, '..'));
 
             return parentDir === path.basename(pathToDir);
         })
-        .forEach(async (e) => {
-            switch (e.type) {
-                case 'delete':
-                    updatedFiles.delete.push(path.basename(e.path));
-                    break;
-                case 'create':
-                    updatedFiles.create.push(await getFileInfo(event, e.path, path.basename(e.path)));
-                // TODO: CASE FOR UPDATE EVENT
-            }
-        });
+
+    if (nonRecursiveEvents.length === 0) {
+        return;
+    }
+
+    const updatedFiles: UpdatedFiles = { create: [], delete: [], update: [] };
+
+    for await (const e of nonRecursiveEvents) {
+        switch (e.type) {
+            case 'delete':
+                updatedFiles.delete.push(path.basename(e.path));
+                break;
+            case 'create':
+                const f = await getFileInfo(event, e.path, path.basename(e.path));
+                updatedFiles.create.push(f);
+            // TODO: CASE FOR UPDATE EVENT
+        }
+    }
 
     updatedFiles.create = updatedFiles.create.filter(file => file);
 

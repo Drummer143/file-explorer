@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import GoogleIcon from '../GoogleIcon/GoogleIcon';
-import usePopupStore from './../../stores/popupStore';
+import GoogleIcon from '../../GoogleIcon/GoogleIcon';
+import usePopupStore from './../../../stores/popupStore';
 
 type Props = PopupInfo & { index: number };
 

@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, KeyboardEvent, FormEvent } from 'react';
 import xbytes from 'xbytes';
 
 import { useCMCStore } from '../../../stores/CMCStore';
 import { useHistoryStore } from '../../../stores/historyStore';
 import GoogleIcon from '../../GoogleIcon/GoogleIcon';
-
-import styles from './FileButton.module.scss';
 
 type Props = {
     file: CustomFile;
@@ -23,17 +21,26 @@ function FileButton({ file, onDoubleClick }: Props) {
     const { isFile, size, fileName: name, isDirectory, isDrive } = file;
 
     const handleRenameFile = () => {
-        if (name !== filenameInput) {
+        if (filenameInput && name !== filenameInput) {
             window.electronAPI.renameFile(`${currentPath}\\${name}`, `${currentPath}\\${filenameInput}`)
         }
 
         setCurrentEditingFile(undefined);
     }
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleRenameFileSubmit = () => (e: FormEvent) => {
+        e.preventDefault();
+        if (filenameInput) {
+            handleRenameFile();
+        }
+    }
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
         switch (e.code) {
             case 'Enter':
-                handleRenameFile();
+                if (currentEditingFile !== file.fileName) {
+                    onDoubleClick();
+                }
                 break;
         }
     }
@@ -53,13 +60,13 @@ function FileButton({ file, onDoubleClick }: Props) {
             data-ctx={ctx}
             data-info={name}
             onDoubleClick={onDoubleClick}
+            onKeyDown={handleKeyDown}
             onClick={e => (e.target as HTMLElement).focus()}
             className={'flex cursor-pointer items-center flex-row px-3 py-2 rounded-lg bg-[var(--top-grey-dark)]'
                 .concat(' gap-x-2 gap-y-1 transition-[background-color] -outline-offset-1 outline-1')
                 .concat(' hover:bg-[var(--bottom-grey-dark)]')
                 .concat(' active:bg-[var(--bg-dark)]')
-                .concat(' focus:outline focus:outline-gray-400')
-                .concat(' ', styles.wrapper)}
+                .concat(' focus:outline focus:outline-gray-400')}
         >
             {file.isFile && file.type === 'image' ?
                 <img
@@ -77,24 +84,27 @@ function FileButton({ file, onDoubleClick }: Props) {
                 />
             }
 
-            <div>
+            <form onSubmit={handleRenameFileSubmit}>
                 {currentEditingFile !== name ?
                     <p>{name}</p>
                     :
                     <input
+                        required
                         ref={ref => ref?.focus()}
-                        className='block bg-white text-black rounded-lg px-2'
                         value={filenameInput}
+                        onInvalid={e => e.preventDefault()}
                         onFocus={() => setFilenameInput(currentEditingFile)}
                         onBlur={handleRenameFile}
-                        onKeyDown={handleKeyDown}
                         onChange={e => setFilenameInput(e.target.value)}
+                        className={'block bg-white text-black rounded-lg px-2 outline outline-1 outline-transparent transition-[outline-color,_background-color]'
+                            .concat(' invalid:outline-red-400 invalid:bg-red-100')}
                     />
                 }
+
                 {isFile && (
                     <p className={`text-[var(--secondary-text-dark)] text-[0.8rem]`}>{xbytes(size)}</p>
                 )}
-            </div>
+            </form>
         </button>
     );
 }

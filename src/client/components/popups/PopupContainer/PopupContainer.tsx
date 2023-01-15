@@ -3,8 +3,8 @@ import { useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Popup from '../Popup/Popup';
-import usePopupStore from './../../stores/popupStore';
-import { useHistoryStore } from '../../stores/historyStore';
+import usePopupStore from './../../../stores/popupStore';
+import { useHistoryStore } from '../../../stores/historyStore';
 
 function PopupContainer() {
     const { t } = useTranslation();

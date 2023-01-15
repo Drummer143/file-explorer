@@ -9,7 +9,7 @@ function GoForwardButton({ onClickAdditional }: Props) {
     const { goForward, currentPathIndex, history } = useHistoryStore(state => state);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const currentPath = goForward();
+        goForward();
 
         if (e.clientX || e.clientY) {
             onClickAdditional();

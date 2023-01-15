@@ -6,7 +6,7 @@ import ContextMenu from './components/ContextMenu/ContextMenu';
 import ModalLayout from './components/Modals/ModalLayout/ModalLayout';
 import FileExplorer from './components/FileExplorer/FileExplorerLayout/FileExplorerLayout';
 import FrameWindowControlButtons from './components/FrameWindowControlButtons/FrameWindowControlButtons';
-import PopupContainer from './components/PopupContainer/PopupContainer';
+import PopupContainer from './components/popups/PopupContainer/PopupContainer';
 
 function App() {
     const [isFullscreen, setIsFullscreen] = useState(false);

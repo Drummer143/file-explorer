@@ -30,10 +30,6 @@ function FileExplorerLayout() {
         }
     }, [currentPath]);
 
-    useEffect(() => {
-        window.electronAPI.getDrives();
-    }, []);
-
     return (
         <>
             <PathInput setIsFilesLoading={setIsFilesLoading} />

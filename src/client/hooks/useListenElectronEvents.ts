@@ -29,16 +29,10 @@ const useListenElectronEvents = ({ setFiles, setIsFilesLoading }: Props) => {
     };
 
     const onInDirChange = (event: Electron.IpcRendererEvent, changes: UpdatedFiles) => {
-        setFiles(prev => {
-            prev = prev.filter(file => !changes.delete.find(f => f === file.fileName));
-            changes.create.forEach(file => {
-                if (!prev.find(f => f.fileName === file.fileName)) {
-                    prev.push(file);
-                }
-            });
-
-            return prev;
-        });
+        setFiles(prev => prev
+            .filter(file => !changes.delete.find(f => f === file.fileName))
+            .concat(changes.create)
+        );
         setIsFilesLoading(false);
     };
 

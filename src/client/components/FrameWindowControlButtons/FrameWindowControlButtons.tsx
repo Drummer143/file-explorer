@@ -27,7 +27,7 @@ function FrameWindowControlButtons({ isFullscreen, setIsFullscreen }: Props) {
     return (
         <div
             className={'absolute flex gap-1 p-1 rounded-bl-lg right-0 top-0 z-[100] bg-[var(--menu-dark)] transition-transform'
-                .concat(isFullscreen ? ` -translate-y-[100%] hover:translate-y-0` : '')
+                .concat(isFullscreen ? ' -translate-y-[100%] hover:translate-y-0' : '')
                 .concat(' ', styles.wrapper)}
         >
             <button

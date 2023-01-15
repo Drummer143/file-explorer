@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { useHistoryStore } from '../../../stores/historyStore';
 import FileButton from '../FileButton/FileButton';

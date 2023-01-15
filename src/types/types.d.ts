@@ -51,3 +51,18 @@ type ElectronErrorKind = 'invalidPath' | 'onOpenFile' | 'onGetInfo'
 type ElectronErrorAdditionalData = Partial<{
     path: string
 }>
+
+type ContextMenuProps = {
+    shouldDisplay: boolean;
+    x: string;
+    y: string;
+};
+
+type SectionProps = {
+    name: string;
+    onClick: (info?: string) => void;
+};
+
+type MenuSections = {
+    [key: string]: SectionProps[];
+};

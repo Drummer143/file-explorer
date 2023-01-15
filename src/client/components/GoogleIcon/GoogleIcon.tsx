@@ -1,14 +1,5 @@
 import React from 'react';
 
-import './GoogleIcon.scss';
-
-type IconParams = {
-    fill?: number;
-    weight?: number;
-    grade?: number;
-    opticalSize?: number;
-};
-
 type IconName =
     | 'css' // ccs
     | 'html' // html

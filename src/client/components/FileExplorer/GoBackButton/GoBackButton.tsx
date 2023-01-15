@@ -9,7 +9,7 @@ function GoBackButton({ onClickAdditional }: Props) {
     const { goBack, currentPathIndex } = useHistoryStore(state => state);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const currentPath = goBack();
+        goBack();
 
         if (e.clientX || e.clientY) {
             onClickAdditional();
