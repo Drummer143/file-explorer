@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCMCStore } from '../../stores/CMCStore';
-import { useHistoryStore } from '../../stores/explorerStores';
+import { useHistoryStore } from '../../stores/historyStore';
 import LocalizedText from '../LocalizedText/LocalizedText';
 
 import styles from './ContextMenu.module.scss';
@@ -52,11 +52,11 @@ function ContextMenu() {
         file: [
             {
                 name: t('ctx.buttons.open'),
-                onClick: info => window.electronAPI.openFile(`${currentPath}/${info}`)
+                onClick: info => window.electronAPI.openFile(`${currentPath}\\${info}`)
             },
             {
                 name: t('ctx.buttons.delete'),
-                onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
+                onClick: info => window.electronAPI.deleteFile(`${currentPath}\\${info}`)
             },
             {
                 name: t('ctx.buttons.rename'),
@@ -69,14 +69,14 @@ function ContextMenu() {
             {
                 name: t('ctx.buttons.open'),
                 onClick: info => {
-                    const path = `${currentPath}/${info}`;
+                    const path = `${currentPath}\\${info}`;
                     pushRoute(path);
                     window.electronAPI.readDirectory(path);
                 }
             },
             {
                 name: t('ctx.buttons.delete'),
-                onClick: info => window.electronAPI.deleteFile(`${currentPath}/${info}`)
+                onClick: info => window.electronAPI.deleteFile(`${currentPath}\\${info}`)
             },
             {
                 name: t('ctx.buttons.rename'),

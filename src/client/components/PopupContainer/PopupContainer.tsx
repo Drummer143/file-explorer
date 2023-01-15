@@ -10,10 +10,9 @@ function PopupContainer() {
     const { addPopups, popups } = usePopupStore();
 
     useEffect(() => {
-        window.electronAPI.onError((event, error, type, ...rest) => {
-            console.log(error, type, rest);
-            addPopups({ id: v4(), type, message: t(`explorerErrors.${error}`)});
-        })
+        window.electronAPI.onError((event, error, type, ...rest) =>
+            addPopups({ id: v4(), type, message: t(`explorerErrors.${error}`) })
+        )
     }, [])
 
     return (

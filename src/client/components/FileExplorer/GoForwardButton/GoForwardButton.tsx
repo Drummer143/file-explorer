@@ -1,4 +1,4 @@
-import { useHistoryStore } from '../../../stores/explorerStores';
+import { useHistoryStore } from '../../../stores/historyStore';
 import GoogleIcon from '../../GoogleIcon/GoogleIcon';
 
 type Props = {

@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import PathInput from '../PathInput/PathInput';
 import useListenElectronEvents from '../../../hooks/useListenElectronEvents';
 
 import FileList from '../FileList/FileList';
+import { useHistoryStore } from '../../../stores/historyStore';
 
 function FileExplorerLayout() {
+    const { currentPath } = useHistoryStore();
     const [files, setFiles] = useState<CustomFile[]>([]);
     const [isFilesLoading, setIsFilesLoading] = useState(true);
 
@@ -14,7 +16,23 @@ function FileExplorerLayout() {
         setIsFilesLoading
     });
 
-    useEffect(() => window.electronAPI.getDrives(), []);
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.shiftKey && e.code === 'KeyE') {
+            window.electronAPI.openInExplorer(currentPath);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [currentPath]);
+
+    useEffect(() => {
+        window.electronAPI.getDrives();
+    }, []);
 
     return (
         <>

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { useHistoryStore } from '../../../stores/explorerStores';
+import { useHistoryStore } from '../../../stores/historyStore';
 import FileButton from '../FileButton/FileButton';
 
 import styles from './FileList.module.scss';
@@ -18,8 +18,8 @@ function FileList({ files, isFilesLoading, setIsFilesLoading }: Props) {
     const fileContainerRef = useRef<HTMLDivElement>(null);
 
     const handleOpenFile = (file: CustomFile) => {
-        let newPath = currentPath ? `${currentPath}/${file.fileName}` : file.fileName;
-        newPath = newPath.replace(/[\\/]{2,}|\//g, '/');
+        let newPath = currentPath ? `${currentPath}\\${file.fileName}` : file.fileName;
+        newPath = newPath.replace(/[\\/]{2,}|\//g, '\\');
 
         if (file.isDirectory || file.isDrive) {
             pushRoute(newPath);

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import xbytes from 'xbytes';
 
 import { useCMCStore } from '../../../stores/CMCStore';
-import { useHistoryStore } from '../../../stores/explorerStores';
+import { useHistoryStore } from '../../../stores/historyStore';
 import GoogleIcon from '../../GoogleIcon/GoogleIcon';
 
 import styles from './FileButton.module.scss';
@@ -24,7 +24,7 @@ function FileButton({ file, onDoubleClick }: Props) {
 
     const handleRenameFile = () => {
         if (name !== filenameInput) {
-            window.electronAPI.renameFile(`${currentPath}/${name}`, `${currentPath}/${filenameInput}`)
+            window.electronAPI.renameFile(`${currentPath}\\${name}`, `${currentPath}\\${filenameInput}`)
         }
 
         setCurrentEditingFile(undefined);

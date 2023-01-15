@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useHistoryStore } from "../../../stores/explorerStores";
+import { useHistoryStore } from "../../../stores/historyStore";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import GoForwardButton from "../GoForwardButton/GoForwardButton";
 
@@ -24,14 +24,16 @@ function PathInput({ setIsFilesLoading }: Props) {
     };
 
     const handlePathInputEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.code === 'Enter' && currentPath !== input) {
+        const newPath = input.replace('/', '\\');
+
+        if (e.code === 'Enter' && currentPath !== newPath) {
             setIsFilesLoading(true);
-            if (input) {
-                window.electronAPI.readDirectory(input);
+            if (newPath) {
+                window.electronAPI.readDirectory(newPath);
             } else {
                 window.electronAPI.getDrives();
             }
-            pushRoute(input);
+            pushRoute(newPath);
             inputRef.current.blur();
         }
     };

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useHistoryStore } from '../stores/explorerStores';
+import { useHistoryStore } from '../stores/historyStore';
 
 type Props = {
     setFiles: React.Dispatch<React.SetStateAction<CustomFile[]>>;
