@@ -9,6 +9,7 @@ interface HistoryStore {
     pushRoute: (newPath: string) => void;
     goBack: () => string;
     goForward: () => string;
+    deleteLastRoute: () => void
 }
 
 const useHistoryStore = create<HistoryStore>((set, get) => ({
@@ -49,6 +50,29 @@ const useHistoryStore = create<HistoryStore>((set, get) => ({
 
         return get().currentPath;
     },
+
+    deleteLastRoute: () => {
+        const { history, currentPath, currentPathIndex } = get();
+
+        let h = history.slice(0, -1);
+        let cp = h.at(-1);
+        let cpi = h.length;
+
+        console.log(history.slice(), h);
+        console.log(currentPath, cp);
+        console.log(currentPathIndex, cpi);
+
+        set(() => ({
+            history: h,
+            currentPath: cp,
+            currentPathIndex: cpi
+        }))
+    },
+    // set(({ history }) => ({
+    //     history: history.slice(0, -1),
+    //     currentPath: history.at(-1) || '',
+    //     currentPathIndex: history.length - 1
+    // })),
 
     reset: () => set(() => ({ history: [], currentPath: '' }))
 }));

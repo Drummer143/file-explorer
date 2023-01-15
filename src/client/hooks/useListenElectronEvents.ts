@@ -21,7 +21,6 @@ const useListenElectronEvents = ({ setFiles, setIsFilesLoading }: Props) => {
         setIsFilesLoading(false);
     };
 
-
     const onReadDirectory = (event: Electron.IpcRendererEvent, files: CustomFile[], pathToParentDir: string) => {
         if (currentPath === pathToParentDir) {
             setFiles(files.reverse().sort(file => (file.isFile ? 1 : -1)));
@@ -60,6 +59,14 @@ const useListenElectronEvents = ({ setFiles, setIsFilesLoading }: Props) => {
             window.electronAPI.unsubscribe('directory');
         }
     })
+
+    useEffect(() => {
+        if (currentPath) {
+            window.electronAPI.readDirectory(currentPath)
+        } else {
+            window.electronAPI.getDrives();
+        }
+    }, [currentPath]);
 };
 
 export default useListenElectronEvents;

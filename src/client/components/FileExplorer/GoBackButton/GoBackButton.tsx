@@ -11,12 +11,6 @@ function GoBackButton({ onClickAdditional }: Props) {
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         const currentPath = goBack();
 
-        if (currentPath) {
-            window.electronAPI.readDirectory(currentPath);
-        } else {
-            window.electronAPI.getDrives();
-        }
-
         if (e.clientX || e.clientY) {
             onClickAdditional();
         }

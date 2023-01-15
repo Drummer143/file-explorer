@@ -38,12 +38,16 @@ type FileCreatingModalParams = {
     path: string
 }
 
-type ErrorType = 'error' | 'warning' | 'info';
-
 type PopupInfo = {
     type: ErrorType
     message: string
     id: string
 }
 
+type ElectronErrorType = 'error' | 'warning' | 'info';
+
 type ElectronErrorKind = 'invalidPath' | 'onOpenFile' | 'onGetInfo'
+
+type ElectronErrorAdditionalData = Partial<{
+    path: string
+}>

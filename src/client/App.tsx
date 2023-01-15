@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Settings from './components/Settings/Settings';
 import TittleFrame from './components/TittleFrame/TittleFrame';
@@ -20,7 +20,7 @@ function App() {
     }, []);
 
     return (
-        <>
+        <React.StrictMode>
             <Settings />
             <ModalLayout />
             <ContextMenu />
@@ -31,7 +31,7 @@ function App() {
                 isFullscreen={isFullscreen}
                 setIsFullscreen={setIsFullscreen}
             />
-        </>
+        </React.StrictMode>
     );
 }
 

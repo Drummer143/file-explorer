@@ -23,7 +23,7 @@ i18n
                     language: 'Language',
                     title: 'File Explorer',
                     explorerErrors: {
-                        invalidPath: "Can't find {}. Check correctness of the path",
+                        invalidPath: "Can't find !<path!<. Check correctness of the path",
                         onOpenFile: "Can't open file",
                         onGetInfo: "Can't get information about file",
                     },
@@ -62,7 +62,7 @@ i18n
                     language: 'Язык',
                     title: 'Проводник',
                     explorerErrors: {
-                        invalidPath: "Не удаётся найти {}. Проверьте правильность указанного пути",
+                        invalidPath: "Не удаётся найти !<path>. Проверьте правильность указанного пути",
                         onOpenFile: 'Не удалось открыть файл',
                         onGetInfo: 'Не удалось получить информацию о файле',
                     },

@@ -48,8 +48,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     unsubscribe: (event: 'drives-loaded' | 'directory' | 'in-dir-change') =>
         ipcRenderer.removeAllListeners(event),
 
-    onError: (callback: Function) => ipcRenderer.on('error', (event: Electron.IpcRendererEvent, error: ElectronErrorKind, type: ErrorType, ...rest: any[]) =>
-        callback(event, error, type, ...rest)),
+    onError: (callback: Function) => ipcRenderer.on('error', (event: Electron.IpcRendererEvent, error: ElectronErrorKind, type: ElectronErrorType, data: ElectronErrorAdditionalData) =>
+        callback(event, error, type, data)),
 
     openInExplorer: (path: string) => ipcRenderer.send('open-in-explorer', path)
 });

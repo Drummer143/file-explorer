@@ -26,12 +26,6 @@ function FileList({ files, isFilesLoading, setIsFilesLoading }: Props) {
             setIsFilesLoading(true);
 
             fileContainerRef.current.scrollTo({ top: 0 });
-
-            if (!currentPath) {
-                window.electronAPI.readDirectory(newPath);
-            } else {
-                window.electronAPI.readDirectory(newPath);
-            }
         } else {
             window.electronAPI.openFile(newPath);
         }

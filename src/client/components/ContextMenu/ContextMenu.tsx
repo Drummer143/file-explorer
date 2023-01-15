@@ -38,10 +38,7 @@ function ContextMenu() {
         drive: [
             {
                 name: t('ctx.buttons.open'),
-                onClick: info => {
-                    pushRoute(info);
-                    window.electronAPI.readDirectory(info);
-                }
+                onClick: info => pushRoute(info)
             },
             {
                 name: t('ctx.buttons.openInExplorer'),
@@ -60,9 +57,7 @@ function ContextMenu() {
             },
             {
                 name: t('ctx.buttons.rename'),
-                onClick: (info) => {
-                    setCurrentEditingFile(info);
-                }
+                onClick: (info) => setCurrentEditingFile(info)
             }
         ],
         folder: [
@@ -71,7 +66,6 @@ function ContextMenu() {
                 onClick: info => {
                     const path = `${currentPath}\\${info}`;
                     pushRoute(path);
-                    window.electronAPI.readDirectory(path);
                 }
             },
             {
@@ -80,41 +74,33 @@ function ContextMenu() {
             },
             {
                 name: t('ctx.buttons.rename'),
-                onClick: (info) => {
-                    setCurrentEditingFile(info);
-                }
+                onClick: (info) => setCurrentEditingFile(info)
             },
             {
                 name: t('ctx.buttons.openInExplorer'),
-                onClick: info => {
-                    window.electronAPI.openInExplorer(`${currentPath}\\${info}`);
-                }
+                onClick: info => window.electronAPI.openInExplorer(`${currentPath}\\${info}`)
             }
         ],
         explorer: [
             {
                 name: t('ctx.buttons.createFolder'),
-                onClick: () => {
-                    setModal({
-                        name: 'fileCreating',
-                        data: {
-                            path: currentPath,
-                            type: 'folder'
-                        }
-                    })
-                }
+                onClick: () => setModal({
+                    name: 'fileCreating',
+                    data: {
+                        path: currentPath,
+                        type: 'folder'
+                    }
+                })
             },
             {
                 name: t('ctx.buttons.createFile'),
-                onClick: () => {
-                    setModal({
-                        name: 'fileCreating',
-                        data: {
-                            path: currentPath,
-                            type: 'file'
-                        }
-                    })
-                }
+                onClick: () => setModal({
+                    name: 'fileCreating',
+                    data: {
+                        path: currentPath,
+                        type: 'file'
+                    }
+                })
             },
             {
                 name: t('ctx.buttons.openInExplorer'),

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { useHistoryStore } from "../../../stores/historyStore";
 import GoBackButton from "../GoBackButton/GoBackButton";
@@ -28,11 +28,6 @@ function PathInput({ setIsFilesLoading }: Props) {
 
         if (e.code === 'Enter' && currentPath !== newPath) {
             setIsFilesLoading(true);
-            if (newPath) {
-                window.electronAPI.readDirectory(newPath);
-            } else {
-                window.electronAPI.getDrives();
-            }
             pushRoute(newPath);
             inputRef.current.blur();
         }

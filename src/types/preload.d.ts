@@ -38,7 +38,7 @@ interface IElectronAPI {
     unsubscribe: (event: 'drives-loaded' | 'directory' | 'in-dir-change') => void;
 
     onError: (
-        callback: (event: Electron.IpcRendererEvent, error: ElectronErrorKind, type: ErrorType, ...rest: any[]) => void
+        callback: (event: Electron.IpcRendererEvent, error: ElectronErrorKind, type: ErrorType, data: ElectronErrorAdditionalData) => void
     ) => void;
 
     openInExplorer: (path: string) => void

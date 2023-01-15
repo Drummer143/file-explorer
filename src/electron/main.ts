@@ -119,7 +119,7 @@ const getFileType = async (event: IpcMainEvent, pathToFile: string): Promise<Fil
     try {
         return await fileTypeFromFile(pathToFile);
     } catch (error) {
-        sendError(event.sender, 'onGetInfo', 'warning', pathToFile);
+        sendError(event.sender, 'onGetInfo', 'warning', { path: pathToFile });
         // console.error(error);
 
         return;
@@ -147,7 +147,7 @@ const getFileInfo = async (event: IpcMainEvent, pathToFile: string, name: string
             size: stats.size
         };
     } catch (error) {
-        sendError(event.sender, 'onGetInfo', 'warning', pathToFile);
+        sendError(event.sender, 'onGetInfo', 'warning', { path: pathToFile });
         // console.error(error);
     }
 };
@@ -159,7 +159,7 @@ const watchForDirectory = async (
     events: watcher.Event[]
 ) => {
     if (error) {
-        sendError(event.sender, 'onGetInfo', 'warning', pathToDir);
+        sendError(event.sender, 'onGetInfo', 'warning', { path: pathToDir });
         // console.error(error);
     }
 
@@ -215,24 +215,27 @@ const readDrives = (event: IpcMainEvent) => {
 };
 
 const readDirectory = async (event: IpcMainEvent, pathToDir: string) => {
+    if (!fs.existsSync(pathToDir)) {
+        sendError(event.sender, 'invalidPath', 'error', { path: pathToDir });
+        return;
+    }
+
     if (unsubscribe) {
         unsubscribe();
     }
 
-    if (pathToDir) {
-        const files = fs.readdirSync(`${pathToDir}\\`, { encoding: 'utf-8' });
+    const files = fs.readdirSync(`${pathToDir}\\`, { encoding: 'utf-8' });
 
-        const filesWithInfo = await Promise.all(
-            files.map(async (file) =>
-                await getFileInfo(event, `${pathToDir}\\${file}`, file)
-            )
+    const filesWithInfo = await Promise.all(
+        files.map(async (file) =>
+            await getFileInfo(event, `${pathToDir}\\${file}`, file)
         )
-            .then(res => {
-                return res.filter(file => file)
-            })
+    )
+        .then(res => {
+            return res.filter(file => file)
+        })
 
-        event.sender.send('directory', filesWithInfo, pathToDir);
-    }
+    event.sender.send('directory', filesWithInfo, pathToDir);
 
     const watch = (error: Error, events: watcher.Event[]) =>
         watchForDirectory(event, pathToDir, error, events);
@@ -250,7 +253,7 @@ const openFile = (event: IpcMainEvent, pathToFile: string) => {
 
     exec(`${pathToFile}`, (error, stdout) => {
         if (error) {
-            sendError(event.sender, 'onOpenFile', 'error', pathToFile);
+            sendError(event.sender, 'onOpenFile', 'error', { path: pathToFile });
             // console.error(error);
         } else {
             console.info(stdout);
@@ -274,8 +277,8 @@ const createFile = (event: IpcMainEvent, pathToFile: string) => {
     fs.openSync(pathToFile, 'w');
 }
 
-const sendError = (sender: Electron.WebContents, error: ElectronErrorKind, type: ErrorType, ...rest: any[]) => {
-    sender.send('error', error, type, rest)
+const sendError = (sender: Electron.WebContents, error: ElectronErrorKind, type: ElectronErrorType, data: ElectronErrorAdditionalData) => {
+    sender.send('error', error, type, data)
 }
 
 const openInExplorer = (event: IpcMainEvent, pathToDir: string) => {
@@ -284,14 +287,14 @@ const openInExplorer = (event: IpcMainEvent, pathToDir: string) => {
             console.error(error);
         }
 
-        if(stderr) {
+        if (stderr) {
             console.error(stderr);
         }
 
-        if(stdout) {
+        if (stdout) {
             console.log(stdout);
         }
-})
+    })
 }
 
 ipcMain.on('get-drives', readDrives);
