@@ -34,7 +34,8 @@ i18n
                             rename: 'Rename',
                             createFolder: 'Create folder',
                             createFile: 'Create file',
-                            openInExplorer: 'Open in Windows explorer'
+                            openInExplorer: 'Open in Windows explorer',
+                            appearance: 'Appearance'
                         },
                         sections: {
                             drive: 'drive',
@@ -73,7 +74,8 @@ i18n
                             rename: 'Переименовать',
                             createFolder: 'Создать папку',
                             createFile: 'Создать файл',
-                            openInExplorer: 'Открыть в проводнике Windows'
+                            openInExplorer: 'Открыть в проводнике Windows',
+                            appearance: 'Вид'
                         },
                         sections: {
                             drive: 'диск',

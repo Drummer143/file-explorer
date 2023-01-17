@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 
-import LocalizedText from '../LocalizedText/LocalizedText';
+import LocalizedText from '../../LocalizedText/LocalizedText';
 import createCTXMenuSections from './createCTXMenuSections';
 
 import styles from './ContextMenu.module.scss';
+import CTXSubSection from '../CTXSubSection/CTXSubSection';
+import CTXActionField from '../CTXActionField/CTXActionField';
 
-const defaultMenuParams = { shouldDisplay: false, y: '200vh', x: '200vw' };
+type ContextMenuProps = {
+    shouldDisplay: boolean;
+    x: string;
+    y: string;
+};
+
+const defaultMenuParams: ContextMenuProps = { shouldDisplay: false, y: '200vh', x: '200vw' };
 
 function ContextMenu() {
     const [currentMenuSections] = useState<{ section: string; info: string }[]>([]);
@@ -101,7 +109,7 @@ function ContextMenu() {
     return (
         <div
             ref={ctxRef}
-            className={'transition-opacity bg-[var(--menu-dark)] min-w-[150px] border border-[var(--top-grey-dark)] p-1 border-solid absolute z-[100] rounded-md'
+            className={'transition-opacity bg-[var(--menu-dark)] min-w-[150px] border border-[var(--top-grey-dark)] py-1 border-solid absolute z-[100] rounded-md'
                 .concat(!contextMenuParams.shouldDisplay ? ' opacity-0 top-[200vh] left-[200vw] pointer-events-none hidden' : '')
                 .concat(' ', styles.wrapper)}
             style={{ top: contextMenuParams.y, left: contextMenuParams.x }}
@@ -113,7 +121,7 @@ function ContextMenu() {
                             className={`border-0 border-t border-t-[var(--secondary-text-dark)] border-solid leading-none`}
                             key={section}
                         >
-                            <legend className={`text-xs relative ${styles.heading}`}>
+                            <legend className={`ml-1 text-xs relative ${styles.heading}`}>
                                 <LocalizedText i18key={`ctx.sections.${section}`} />
                             </legend>
 
@@ -121,17 +129,17 @@ function ContextMenu() {
                                 className={'flex flex-col items-start gap-0.5 transition-[background-color]'
                                     .concat(' ', i === currentMenuSections.length - 1 ? 'mt-1' : 'my-1')}
                             >
-                                {menuSections[section].map(({ onClick, name }, i) => (
-                                    <div
-                                        className={'pl-2 w-full py-1 text-start transition-[background-color] cursor-pointer rounded'
-                                            .concat(' hover:bg-[var(--top-grey-dark)]')
-                                            .concat(' active:bg-[var(--bottom-grey-dark)]')}
-                                        key={i}
-                                        onClick={() => handleClick(() => onClick(info))}
-                                    >
-                                        {name}
-                                    </div>
-                                ))}
+                                {menuSections[section].map(section =>
+                                    section.type === 'action' ? (
+                                        <CTXActionField
+                                            sectionInfo={section}
+                                            onClick={() => handleClick(() => section.onClick(info))}
+                                            key={section.name}
+                                        />
+                                    ) : (
+                                        <CTXSubSection handleActionFieldClick={handleClick} key={section.name} sectionInfo={section} />
+                                    )
+                                )}
                             </div>
                         </fieldset>
                     );

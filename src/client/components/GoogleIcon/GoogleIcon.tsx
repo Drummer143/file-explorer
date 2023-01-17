@@ -31,9 +31,8 @@ function GoogleIcon({
     return (
         <span
             style={size ? { fontSize: size } : null}
-            className={`aspect-square grid place-items-center material-symbols-outlined${className ? ` ${className}` : ''
-                }`}
-        // style={{ fontVariationSettings: `"FILL" ${iconParams.fill}, "wght" ${iconParams.weight}, "GRAD" ${iconParams.grade}, "opsz" ${iconParams.opticalSize}` }}
+            className={'material-symbols-outlined aspect-square'
+                .concat(' ', className || 'grid place-items-center')}
         >
             {iconName}
         </span>

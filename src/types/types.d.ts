@@ -52,17 +52,18 @@ type ElectronErrorAdditionalData = Partial<{
     path: string
 }>
 
-type ContextMenuProps = {
-    shouldDisplay: boolean;
-    x: string;
-    y: string;
-};
-
-type SectionProps = {
+type ActionFieldProps = {
     name: string;
     onClick: (info?: string) => void;
-};
+    type: 'action'
+}
+
+type SubsectionFieldProps = {
+    type: 'section'
+    name: string,
+    children: ActionFieldProps[]
+}
 
 type MenuSections = {
-    [key: string]: SectionProps[];
+    [key: string]: (SubsectionFieldProps | ActionFieldProps)[];
 };
