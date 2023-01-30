@@ -13,3 +13,4 @@
   3. Zustang
   4. Webpack
   5. TailwingCSS + Sass
+  6. i18n
