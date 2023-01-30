@@ -9,8 +9,9 @@
 
 ## Technology stack
   1. Electron
-  2. React
-  3. Zustang
-  4. Webpack
-  5. TailwingCSS + Sass
-  6. i18n
+  2. Typescript
+  3. React
+  4. Zustang
+  5. Webpack
+  6. TailwingCSS + Sass
+  7. i18n
